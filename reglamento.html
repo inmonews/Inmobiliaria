@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reglamento del Sistema de Adscripto Inmobiliario — COCIR 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2340;
+    --navy-mid: #1a3a5c;
+    --blue: #1d5fa8;
+    --blue-light: #2e75b6;
+    --gold: #c8a84b;
+    --gold-light: #e8c96a;
+    --cream: #faf8f3;
+    --warm-white: #f5f2eb;
+    --gray-text: #3d3d3d;
+    --gray-mid: #6b6b6b;
+    --gray-light: #e8e4db;
+    --red-soft: #8b2e2e;
+    --green-soft: #1e5c3a;
+    --sidebar-w: 280px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--gray-text);
+    line-height: 1.75;
+    font-size: 20px;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--navy);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 40px 0;
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: var(--navy); }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--blue-light); border-radius: 2px; }
+
+  .sidebar-header {
+    background: var(--navy-mid);
+    padding: 28px 24px 20px;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .sidebar-header .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-header .doc-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .nav-section {
+    padding: 20px 0 8px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 9px 24px 9px 24px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Source Serif 4', serif;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: white;
+    border-left-color: var(--gold);
+    background: rgba(255,255,255,0.05);
+  }
+
+  .nav-item.sub {
+    padding-left: 38px;
+    font-size: 17px;
+    opacity: 0.8;
+  }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  /* ── COVER ── */
+  #cover {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, #1a4a7a 100%);
+    padding: 80px 80px 70px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #cover::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border: 1px solid rgba(200,168,75,0.15);
+    border-radius: 50%;
+  }
+
+  #cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: 60px;
+    width: 300px; height: 300px;
+    border: 1px solid rgba(200,168,75,0.1);
+    border-radius: 50%;
+  }
+
+  .cover-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.15;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+
+  .cover-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+    max-width: 600px;
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  .cover-divider {
+    width: 80px;
+    height: 3px;
+    background: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .cover-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 1px;
+  }
+
+  /* ── CONTENT ── */
+  #content {
+    max-width: 820px;
+    padding: 60px 80px 100px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 64px;
+    padding-top: 16px;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  h1.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--gray-light);
+    line-height: 1.3;
+  }
+
+  h2.subsection-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy-mid);
+    margin: 36px 0 14px;
+    line-height: 1.4;
+  }
+
+  h3.sub-subsection {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 28px 0 10px;
+    letter-spacing: 0.3px;
+  }
+
+  p {
+    margin-bottom: 18px;
+    text-align: justify;
+    hyphens: auto;
+    font-size: 20px;
+    color: var(--gray-text);
+  }
+
+  p.destacado {
+    background: linear-gradient(to right, rgba(29,95,168,0.06), transparent);
+    border-left: 4px solid var(--blue-light);
+    padding: 16px 20px;
+    margin: 24px 0;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--navy-mid);
+    border-radius: 0 6px 6px 0;
+    text-align: left;
+  }
+
+  ul.bullets {
+    margin: 10px 0 20px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  ul.bullets li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    font-size: 17px;
+    border-bottom: 1px solid var(--gray-light);
+    color: var(--gray-text);
+  }
+
+  ul.bullets li:last-child { border-bottom: none; }
+
+  ul.bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 4px;
+    color: var(--gold);
+    font-size: 17px;
+    top: 10px;
+  }
+
+  ul.bullets li strong {
+    color: var(--navy);
+    display: block;
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+
+  /* ── CALL OUT BOXES ── */
+  .box-warning {
+    background: #fff8f0;
+    border: 1px solid #e8c080;
+    border-left: 5px solid var(--gold);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .box-warning .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .box-danger {
+    background: #fff5f5;
+    border: 1px solid #e8a0a0;
+    border-left: 5px solid var(--red-soft);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .box-danger .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--red-soft);
+    margin-bottom: 6px;
+  }
+
+  .box-key {
+    background: #f0f6ff;
+    border: 1px solid #a0c0e8;
+    border-left: 5px solid var(--blue);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .box-key .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+
+  /* ── TWO COLUMN COMPARISON ── */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .col-good, .col-bad {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .col-good .col-head { background: var(--green-soft); color: white; padding: 10px 16px; font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; }
+  .col-bad .col-head { background: var(--red-soft); color: white; padding: 10px 16px; font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; }
+
+  .col-good .col-body { background: #f0fff5; border: 1px solid #b0ddc0; border-top: none; }
+  .col-bad .col-body { background: #fff5f5; border: 1px solid #e0b0b0; border-top: none; }
+
+  .col-body li { padding: 9px 14px; font-size: 17px; border-bottom: 1px solid rgba(0,0,0,0.06); list-style: none; }
+  .col-body li:last-child { border-bottom: none; }
+  .col-body li strong { display: block; font-size: 17px; color: var(--navy); margin-bottom: 1px; }
+
+  /* ── PHASES ── */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .phase {
+    background: white;
+    border: 1px solid var(--gray-light);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+  }
+
+  .phase-num {
+    width: 32px; height: 32px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+
+  .phase-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .phase-sub {
+    font-size: 17px;
+    color: var(--gray-mid);
+  }
+
+  /* ── BIBLIOGRAPHY ── */
+  .bib-group {
+    margin-bottom: 28px;
+  }
+
+  .bib-group-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gray-light);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+
+  .bib-item {
+    padding: 8px 0 8px 20px;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 17px;
+    color: var(--gray-text);
+    position: relative;
+  }
+
+  .bib-item:last-child { border-bottom: none; }
+
+  .bib-item::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gray-mid);
+    font-size: 17px;
+  }
+
+  .bib-item a {
+    color: var(--blue);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    display: block;
+    margin-top: 3px;
+    word-break: break-all;
+    opacity: 0.8;
+  }
+
+  .bib-item a:hover { opacity: 1; text-decoration: underline; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--gray-light);
+    margin: 48px 0;
+  }
+
+  .divider-gold {
+    border: none;
+    border-top: 2px solid var(--gold);
+    width: 60px;
+    margin: 32px 0;
+  }
+
+  /* ── FOOTER ── */
+  #footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.4);
+    padding: 28px 80px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── MOBILE TOGGLE ── */
+  #menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--navy);
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    #sidebar { transform: translateX(-280px); width: 280px; }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: block; }
+    #cover { padding: 60px 32px 50px; }
+    .cover-title { font-size: 30px; }
+    #content { padding: 40px 32px 80px; }
+    #footer { padding: 20px 32px; flex-direction: column; gap: 8px; text-align: center; }
+    .comparison { grid-template-columns: 1fr; }
+    .phases { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">Corretaje 2026</div>
+    <div class="doc-title">Reglamento del Sistema de Adscripto Inmobiliario</div>
+  </div>
+  <div class="nav-section">Capítulos</div>
+  <a class="nav-item" href="#c1">Nota preliminar</a>
+  <a class="nav-item" href="#c2">Cap. I Objeto y ámbito de aplicación</a>
+  <a class="nav-item" href="#c3">Cap. II Identificación del Adscripto I…</a>
+  <a class="nav-item" href="#c4">Cap. III Registro y vínculo con el Cor…</a>
+  <a class="nav-item" href="#c5">Cap. IV Formación obligatoria y actual…</a>
+  <a class="nav-item" href="#c6">Cap. V Costos y renovación</a>
+  <a class="nav-item" href="#c7">Cap. VI Actos habilitados y exclusivos</a>
+  <a class="nav-item" href="#c8">Cap. VII Régimen de sanciones</a>
+  <a class="nav-item" href="#c9">Cap. VIII Período de transición</a>
+  <a class="nav-item" href="#c10">Cap. IX Horizonte de desarrollo del si…</a>
+  <div class="nav-section" style="margin-top:1.5rem;">Navegar</div>
+  <a class="nav-item" href="index.html">← Documento principal</a>
+  <a class="nav-item" href="reformas.html">→ Mapa de reformas</a>
+</nav>
+
+<div id="main">
+  <div id="cover">
+    <div class="cover-eyebrow">Borrador de trabajo · 2026</div>
+    <div class="cover-title">Reglamento del Sistema de Adscripto Inmobiliario</div>
+    <div class="cover-subtitle">Colegio de Corredores Inmobiliarios de Santa Fe — Sede Rosario</div>
+    <div class="cover-meta">Sujeto a revisión con la UNR y los Colegios participantes · Borrador institucional</div>
+  </div>
+
+<div id="content">
+  <div class="section" id="c1">
+<div class="section-number">Nota preliminar</div>
+<h1 class="section-title">Nota preliminar</h1>
+<p>El presente documento es un borrador de trabajo elaborado como complemento operativo del documento <em>El corretaje inmobiliario: diagnóstico y ordenamiento del sistema</em>. Su objetivo es anticipar el diseño del sistema de Adscripto Inmobiliario, a los efectos de facilitar el debate institucional interno y la posterior elaboración del reglamento definitivo en conjunto con la Universidad Nacional de Rosario (UNR) y los Colegios Profesionales participantes.</p>
+<p>Este borrador no tiene carácter normativo. Será objeto de revisión, ajuste y validación en las instancias institucionales correspondientes antes de su adopción formal. Los artículos aquí incluidos son contenidos de trabajo, no disposiciones vigentes.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c2">
+<div class="section-number">Cap. I</div>
+<h1 class="section-title">Capítulo I — Objeto y ámbito de aplicación</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 1.</strong> El presente Reglamento regula la figura del Adscripto Inmobiliario: su creación, registro, identificación, formación, vínculo con el Corredor Responsable, régimen de costos, renovación, baja y sanciones.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 2.</strong> El sistema de Adscripto Inmobiliario es administrado íntegramente por el Colegio de Corredores Inmobiliarios de la jurisdicción correspondiente. Ninguna entidad privada, franquicia o inmobiliaria puede emitir, administrar ni suspender adscripciones.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 3.</strong> El Adscripto Inmobiliario no es un profesional independiente. Es un colaborador que trabaja dentro de la estructura del Corredor Responsable, bajo su supervisión, en su nombre y con su respaldo institucional. Su habilitación no lo faculta para actuar de manera autónoma ni fuera del marco que el Corredor responsable establece.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c3">
+<div class="section-number">Cap. II</div>
+<h1 class="section-title">Capítulo II — Identificación del Adscripto Inmobiliario</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 4.</strong> Todo Adscripto Inmobiliario recibe dos identificadores:</p>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Número de registro interno: identificador único dentro del sistema informático del Colegio, de uso administrativo. No figura en la credencial pública.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Identificación pública: se compone del número de matrícula del Corredor Responsable seguido de un número de orden correlativo. Formato: [N° matrícula del corredor] / [número de orden]. Ejemplo: si el Corredor tiene matrícula N° 1234 y el Adscripto Inmobiliario es el primero que registra, su identificación pública es 1234/01. El segundo Adscripto Inmobiliario de ese mismo Corredor será 1234/02. Si el primer Adscripto Inmobiliario se da de baja, su número 1234/01 queda como Inactivo Histórico y el próximo ingresante será 1234/03, no 1234/01, y así sucesivamente.</li></ul>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 5.</strong> La identificación pública tiene como propósito principal hacer visible, de manera inmediata, quién es el Corredor Responsable de ese Adscripto Inmobiliario. El ciudadano que interactúa con el Adscripto Inmobiliario puede verificar en tiempo real, mediante el registro online del Colegio, la vigencia de la adscripción y la identidad del corredor responsable.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 6.</strong> El Adscripto Inmobiliario porta en todo momento una credencial vigente emitida por el Colegio, con código QR que enlaza al registro online. La credencial indica: nombre completo del Adscripto Inmobiliario, identificación pública (número de matrícula del corredor / número de orden), nombre y matrícula del Corredor responsable, y fecha de vencimiento anual de la adscripción.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 7.</strong> Si el Adscripto Inmobiliario cambia de Corredor responsable, se le asigna una nueva identificación pública con el número de matrícula del nuevo corredor. El número de registro interno permanece inalterable. La identificación anterior queda inactiva en el sistema.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 8.</strong> La numeración de orden es correlativa histórica y nunca se reutiliza. Cuando un Adscripto Inmobiliario se da de baja o transfiere su adscripción, su número de orden queda marcado como ‘Inactivo Histórico’ en el sistema — no se asigna a ningún ingresante posterior. El próximo Adscripto Inmobiliario que registre ese Corredor recibe el siguiente número correlativo disponible. Este principio protege la trazabilidad jurídica: si un Adscripto Inmobiliario participó en una operación o fue objeto de un reclamo bajo un número determinado, ese número no puede ser confundido con la identidad de otra persona en el futuro. El control del límite de diez (10) Agentes activos simultáneos se realiza por el sistema informático sobre los registros activos en tiempo real, no por el número de orden que figure en la credencial. El padrón público del Colegio muestra para cada Corredor Matriculado un acceso directo a sus Adscriptos Inmobiliarios activos en ese momento. El ciudadano puede consultar en tiempo real la nómina completa de agentes vigentes bajo la responsabilidad de cualquier corredor.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 9.</strong> El Corredor Responsable no puede obtener adscripción. Su herramienta de colaboración con otros corredores es el trabajo conjunto entre profesionales matriculados, formalizado mediante acuerdo de colaboración registrado ante el Colegio, con distribución de responsabilidades y honorarios que ambos corredores declaran al momento de la operación. La adscripción está reservada exclusivamente a personas que no poseen matrícula de Corredor Inmobiliario vigente. El Corredor Inmobiliario Matriculado que solicite la baja voluntaria de su matrícula podrá registrarse como Adscripto Inmobiliario transcurridos trescientos sesenta y cinco (365) días corridos desde la fecha de baja efectiva. Durante ese período de espera no puede ejercer ningún acto de intermediación inmobiliaria, ni como corredor ni como Adscripto Inmobiliario.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 10.</strong> El sistema de Adscripto Inmobiliario se autofinancia íntegramente con los aranceles de adscripción abonados por los Corredores Responsables. Los recursos de los Colegios provenientes de las matrículas de Corredores Inmobiliarios no serán afectados al financiamiento de este sistema. El Colegio elaborará anualmente un informe de sustentabilidad del sistema, que será puesto a disposición de los matriculados. Los superávits del sistema conformarán un fondo de reserva operativa cuyo límite máximo y destino serán determinados por la Asamblea de matriculados. Los déficits serán cubiertos mediante ajuste del valor de la adscripción en la próxima renovación, previa aprobación de la Asamblea.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 11.</strong> Ante la comisión flagrante o notoria de una infracción grave o gravísima, el Tribunal de Disciplina y Ética del Colegio puede disponer la suspensión preventiva inmediata de la adscripción mientras se instruye el sumario. La suspensión preventiva no requiere resolución definitiva previa. El Adscripto Inmobiliario suspendido preventivamente no puede operar válidamente desde la notificación. La suspensión preventiva no prejuzga sobre la sanción definitiva y cesa si el sumario concluye sin mérito.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 12.</strong> El Corredor Responsable responde económicamente de manera solidaria e inmediata ante las multas aplicadas al Adscripto Inmobiliario bajo su cargo. La responsabilidad solidaria del Corredor no requiere declaración judicial: el Colegio puede ejecutar el cobro directamente sobre la cuenta del Corredor en el sistema de gestión colegial.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 13.</strong> Todo ciudadano que inicie una operación inmobiliaria con intervención de un Adscripto Inmobiliario tiene derecho a exigir la exhibición de la credencial vigente antes de proseguir con cualquier acto. La negativa a exhibir la credencial o la exhibición de una credencial vencida o adulterada constituye infracción grave del presente Reglamento. El Colegio garantiza el acceso público, gratuito y permanente al padrón digital de Agentes con Submatrícula activos, disponible las veinticuatro horas del día, todos los días del año, mediante el sitio web institucional y mediante código QR en la credencial de cada Adscripto Inmobiliario.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 14.</strong> Vencido el período de transición de ciento ochenta (180) días, el Colegio pasa a una etapa de fiscalización punitiva estricta. Toda persona que opere como Adscripto Inmobiliario sin adscripción vigente, y todo Corredor Matriculado que permita o tolere la actuación de agentes no registrados, incurren automáticamente en las infracciones y sanciones previstas en el Capítulo VII del presente Reglamento, sin posibilidad de regularización retroactiva.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c4">
+<div class="section-number">Cap. III</div>
+<h1 class="section-title">Capítulo III — Registro y vínculo con el Corredor responsable</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 15.</strong> Para obtener la adscripción, el aspirante debe: (a) completar el curso de formación obligatoria aprobado por el Colegio y dictado por la Universidad Nacional de Rosario o institución académica habilitada; (b) contar con la aceptación formal de un Corredor Responsable que declare asumir la responsabilidad sobre su accionar; y (c) presentar la solicitud de registro ante el Colegio.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 16.</strong> El Corredor Matriculado que acepta a un Adscripto Inmobiliario declara formalmente ante el Colegio que: (a) conoce la identidad y antecedentes del aspirante; (b) asume responsabilidad solidaria por las operaciones en que el Adscripto Inmobiliario intervenga; (c) se compromete a supervisar su accionar; y (d) acepta hacerse cargo del costo íntegro de la adscripción anual.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 17.</strong> El vínculo entre el Adscripto Inmobiliario y el Corredor es de carácter exclusivo. Un Adscripto Inmobiliario trabaja para un único Corredor Matriculado en todo momento. Queda expresamente prohibido actuar para más de un corredor de manera simultánea, aunque sea en jurisdicciones distintas.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 18.</strong> Cada Corredor Matriculado puede tener a su cargo un máximo de diez (10) Agentes registrados en forma simultánea. Una inmobiliaria puede contar con varios Corredores Matriculados, ampliando su capacidad operativa de manera proporcional a su estructura profesional.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 19.</strong> El cambio de Corredor responsable requiere: (a) comunicación formal del Adscripto Inmobiliario al Colegio; (b) aceptación formal del nuevo Corredor; (c) baja del registro del corredor anterior. Durante el proceso de transferencia, el Adscripto Inmobiliario no puede operar válidamente. El corredor saliente queda liberado de responsabilidad por las operaciones posteriores a la fecha de registro de la transferencia.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c5">
+<div class="section-number">Cap. IV</div>
+<h1 class="section-title">Capítulo IV — Formación obligatoria y actualización</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 20.</strong> La formación obligatoria para obtener la adscripción consiste en un curso de corta duración, diseñado y dictado en conjunto con la Universidad Nacional de Rosario (UNR) u otra institución académica con oferta educativa de validez oficial reconocida por el Ministerio de Educación de la Nación o de la Provincia. El curso otorga validez académica a la habilitación.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 21.</strong> El curso está apuntado específicamente a los actos que el Adscripto Inmobiliario está habilitado a realizar. No es una formación profesional integral sino una habilitación funcional: el Adscripto Inmobiliario aprende con precisión qué puede hacer, qué no puede hacer, y cuándo debe derivar al Corredor Responsable. Los contenidos mínimos incluyen:</p>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Marco legal del corretaje inmobiliario — Leyes 20.266, 25.028 y ley provincial aplicable.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Actos habilitados al Adscripto Inmobiliario y actos exclusivos del Corredor Matriculado.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Tipos de operaciones inmobiliarias y documentación básica.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Ética profesional y responsabilidades del Adscripto Inmobiliario.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Derechos del ciudadano en una operación inmobiliaria.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Procedimientos de derivación al Corredor responsable.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Procedimientos de denuncia ante el Colegio.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Funcionamiento del sistema de adscripción: registro, identificación, renovación y baja.</li></ul>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 22.</strong> La renovación anual de la adscripción está condicionada al cumplimiento de instancias de actualización formativa periódica, cuyo formato y carga horaria serán definidos por el Colegio. La actualización apunta a mantener al Adscripto Inmobiliario al día ante cambios legislativos, nuevas modalidades de operación y actualizaciones del presente Reglamento.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 23.</strong> Los contenidos del curso de formación y de las instancias de actualización son reconocibles como créditos en la carrera de Corredor Inmobiliario. El Colegio establecerá, en acuerdo con la UNR, el sistema de equivalencias correspondiente, a los efectos de facilitar la progresión del Adscripto Inmobiliario hacia la matrícula plena.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c6">
+<div class="section-number">Cap. V</div>
+<h1 class="section-title">Capítulo V — Costos y renovación</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 24.</strong> El costo íntegro de la adscripción anual es a cargo del Corredor Responsable. El Adscripto Inmobiliario no tiene obligación económica directa ante el Colegio. La relación económica interna entre Corredor Responsable y Adscripto Inmobiliario — si el Corredor decide trasladarle parte del costo o no — es un acuerdo privado entre ellos que el Colegio no regula ni interviene.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 25.</strong> El valor de la adscripción anual será fijado por el Colegio con carácter general. Como referencia de diseño, se propone que el valor anual sea equivalente al 45% del valor de la matrícula anual del Corredor Inmobiliario Matriculado de la misma jurisdicción, reflejando su carácter de habilitación de segundo nivel.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 26.</strong> El Colegio procesará automáticamente los cargos de adscripción a través del sistema de gestión, vinculados a la cuenta del Corredor responsable. El sistema enviará alertas automáticas con al menos treinta (30) días de anticipación al vencimiento anual, tanto al Corredor como al Adscripto Inmobiliario.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 27.</strong> La falta de pago anual en término implica la suspensión automática de la adscripción. Durante la suspensión, el Adscripto Inmobiliario no puede operar válidamente. La adscripción puede reactivarse dentro de los treinta (30) días siguientes mediante el pago del monto adeudado más los recargos que el Colegio establezca. Vencido ese plazo sin regularización, la adscripción se cancela.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c7">
+<div class="section-number">Cap. VI</div>
+<h1 class="section-title">Capítulo VI — Actos habilitados y exclusivos</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 28.</strong> El Adscripto Inmobiliario está habilitado para realizar los siguientes actos, siempre en el marco de la estructura del Corredor Responsable:</p>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Condición previa a toda actuación: el Adscripto Inmobiliario no puede iniciar ninguna gestión sobre un inmueble sin que el Corredor Responsable acredite contar con la autorización de venta o locación firmada por el titular del bien, conforme lo exige el artículo 14 de la Ley Provincial N° 13.154. La ausencia de dicha autorización impide toda actuación del Adscripto Inmobiliario sobre ese inmueble y genera responsabilidad directa del Corredor Responsable.
+
+Actos habilitados: el Adscripto Inmobiliario está habilitado para realizar los siguientes actos, siempre dentro del marco de la autorización vigente y bajo la responsabilidad del Corredor Responsable:
+
+Mostrar propiedades a potenciales compradores, locatarios o interesados.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Realizar el primer contacto con interesados y relevar información preliminar.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Relevar información básica del inmueble para uso interno de la inmobiliaria.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Acompañar visitas a inmuebles.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Participar en tratativas preliminares de negociación con propietarios, interesados o colegas de otras inmobiliarias, con el objeto de aproximar voluntades conforme al Art. 1345 del Código Civil y Comercial. El Adscripto Inmobiliario no puede comprometer condiciones contractuales definitivas.
+Presentar ofertas al Corredor Matriculado para su evaluación y procesamiento.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Asistir en la organización de documentación bajo supervisión directa del Corredor.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Realizar actividades de difusión y publicidad del inmueble en nombre de la inmobiliaria, siempre con identificación expresa del Corredor Responsable.</li></ul>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 29.</strong> Son actos exclusivos del Corredor Inmobiliario Matriculado, que el Adscripto Inmobiliario no puede realizar bajo ninguna circunstancia:</p>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Tasar y valuar inmuebles.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Redactar contratos, boletos de compraventa, contratos de locación u otros instrumentos con efectos jurídicos.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Suscribir documentos en nombre de las partes o de la inmobiliaria.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Hallarse presente en el momento de la firma de los contratos otorgados por escrito en instrumento privado, y dejar en su texto constancia firmada de su intervención, recogiendo un ejemplar que conservará bajo su responsabilidad (conforme Art. 11, inc. 11 de la Ley N° 13.154). Tampoco puede representar a las partes en actos notariales.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Asesorar jurídicamente sobre la operación.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Percibir honorarios profesionales directamente del cliente o comitente. Los honorarios son percibidos exclusivamente por el Corredor Responsable. El Adscripto Inmobiliario puede recibir una comisión del Corredor Responsable como parte de su acuerdo privado, pero en ningún caso puede cobrar honorarios directamente al cliente.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Asumir la responsabilidad civil y penal de la operación ante las partes.</li></ul>
+<p>La participación de un Adscripto Inmobiliario en cualquiera de los actos listados en el artículo 29 constituye infracción gravísima del presente Reglamento y es causal de cancelación de adscripción, con responsabilidad solidaria del Corredor responsable.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c8">
+<div class="section-number">Cap. VII</div>
+<h1 class="section-title">Capítulo VII — Régimen de sanciones</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 30.</strong> [NOTA DE TRABAJO — Este capítulo opera dentro del marco actual del Reglamento del Tribunal de Ética y Disciplina de COCIR y de la Ley 13.154, a los que remite supletoriamente. El alcance sancionatorio pleno —incluyendo el poder de policía hacia afuera del sistema colegial— requiere la reforma de la Ley 13.154. Mientras esa reforma no se concrete, las sanciones de este capítulo alcanzan exclusivamente a los Adscriptos Inmobiliarios registrados y a los Corredores Responsables dentro del sistema. Pendiente de revisión con asesoramiento jurídico especializado para afinar progresividad y atenuantes.]
+
+El Tribunal de Disciplina y Ética del Colegio tiene plenas facultades para instruir sumarios, resolver y aplicar sanciones a los Adscriptos Inmobiliarios, sin necesidad de proceso judicial previo. Las resoluciones son recurribles ante la Cámara de Apelaciones en lo Penal de la Provincia, conforme al régimen de apelación establecido en el Artículo 44 de la Ley Provincial N° 13.154.
+
+Las sanciones aplicables al Adscripto Inmobiliario son las previstas en la Ley N° 13.154 en lo que resulte pertinente, complementadas con la cancelación del registro de adscripción como sanción propia de esta figura. Las multas se fijan en unidades ius conforme el valor vigente al momento del pago, siguiendo el criterio establecido en el Artículo 44 del Reglamento del Tribunal de Ética y Disciplina de COCIR.
+
+El procedimiento disciplinario se rige supletoriamente por el Reglamento y Normas de Procedimiento del Tribunal de Disciplina y Ética Profesional de COCIR vigente. En todo lo no previsto expresamente en el presente capítulo, se aplican las normas de ese Reglamento.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 31.</strong> Las infracciones se clasifican en tres categorías:</p>
+<p>Infracciones leves</p>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Operar sin portar credencial vigente o con credencial vencida.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">No renovar la adscripción en término sin causa justificada.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Incumplir las instancias de actualización formativa periódica.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">No comunicar al Colegio el cambio de Corredor responsable en el plazo establecido.</li></ul>
+<p>Sanción: apercibimiento formal y multa de hasta cincuenta (50) unidades ius, conforme el valor fijado por el Colegio al momento del pago.</p>
+<p>Infracciones graves</p>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Realizar actos del artículo 28 (actos habilitados) sin adscripción vigente.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Ejercer para un Corredor diferente al registrado sin haber completado el proceso de transferencia.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Presentarse ante clientes o terceros como Corredor Matriculado o con habilitación superior a la que posee.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Incumplir reiteradamente las obligaciones de actualización formativa.</li></ul>
+<p>Sanción: suspensión de adscripción de treinta (30) a ciento ochenta (180) días y multa de hasta cien (100) unidades ius. El Corredor Responsable es sancionado solidariamente con apercibimiento.
+
+Infracción grave del Corredor Responsable: constituye infracción grave del Corredor Responsable permitir, tolerar o no impedir que el Adscripto Inmobiliario bajo su cargo realice actos que exceden su habilitación —en particular los actos exclusivos del Corredor Matriculado enumerados en el artículo 29 del presente Reglamento—. La responsabilidad del Corredor Responsable en este caso no es solidaria sino principal: es él quien ha incumplido su deber de supervisión deontológica. Sanción: suspensión de matrícula de treinta (30) a ciento ochenta (180) días y multa equivalente al doble del valor de la adscripción anual del Adscripto Inmobiliario involucrado.</p>
+<p>Infracciones gravísimas</p>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Realizar cualquiera de los actos exclusivos del artículo 29 sin estar habilitado.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Operar sin adscripción vigente vencido el período de transición establecido.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Suplantar la identidad de un Corredor Matriculado o utilizar su número de matrícula sin autorización.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Participar en operaciones de escrituración en representación de las partes sin habilitación.</li></ul>
+<ul style="margin:0.3rem 0 0.8rem 2rem;"><li style="margin-bottom:0.4rem;line-height:1.6;">Reincidencia en infracciones graves dentro de los dos años posteriores a una sanción.</li></ul>
+<p>Sanción: cancelación definitiva de adscripción y multa máxima. El Corredor responsable es sancionado solidariamente con suspensión de matrícula de treinta (30) a noventa (90) días.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 32.</strong> Todas las sanciones aplicadas son publicadas en el registro público del Colegio, con indicación del nombre del Adscripto Inmobiliario, la infracción cometida, la sanción aplicada y la fecha de resolución. La publicidad de las sanciones es parte del sistema de control y no requiere autorización adicional del sancionado.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 33.</strong> El Corredor Matriculado puede solicitar al Colegio la baja de un Adscripto Inmobiliario bajo su responsabilidad en cualquier momento, sin necesidad de justificación ante el Colegio. La baja se registra con efecto inmediato. El Corredor queda liberado de toda responsabilidad por las operaciones del Adscripto Inmobiliario posteriores a la fecha de registro de la baja.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c9">
+<div class="section-number">Cap. VIII</div>
+<h1 class="section-title">Capítulo VIII — Período de transición</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 34.</strong> Se establece un período de transición de ciento ochenta (180) días corridos desde la entrada en vigencia del presente sistema, durante el cual quienes actualmente operan como agentes informales en el mercado inmobiliario pueden regularizar su situación sin penalización, completando el curso de formación obligatoria y registrando su adscripción.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 35.</strong> Durante el período de transición, los Corredores Matriculados que cuenten con agentes informales operando bajo su responsabilidad disponen del mismo plazo para formalizar esas relaciones. Vencido el período, la responsabilidad solidaria del Corredor por el accionar de agentes no registrados se activa plenamente.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 36.</strong> Vencido el período de transición, quienes continúen operando como agentes sin adscripción vigente incurren en infracción gravísima conforme al artículo 31 del presente Reglamento.</p>
+</div>
+<hr class="divider">
+<div class="section" id="c10">
+<div class="section-number">Cap. IX</div>
+<h1 class="section-title">Capítulo IX — Horizonte de desarrollo del sistema</h1>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 37.</strong> El presente sistema es un punto de partida, no un punto de llegada. La figura del Adscripto Inmobiliario está concebida como el primer escalón de una carrera profesional que tiene como horizonte la matrícula plena de Corredor Inmobiliario Matriculado.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 38.</strong> El Colegio establecerá, en acuerdo con la UNR y con los organismos académicos correspondientes, un sistema de reconocimiento de equivalencias que permita al Adscripto Inmobiliario computar su formación y experiencia acreditada hacia los requisitos de la carrera de Corredor Inmobiliario, facilitando la progresión natural dentro del sistema.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 39.</strong> A mediano plazo, el Colegio evaluará la conveniencia de elevar progresivamente los requisitos de formación para la adscripción, en consonancia con el desarrollo del sector y con el fortalecimiento institucional del sistema. Toda modificación en ese sentido requerirá un proceso de consulta con los Colegios participantes, la UNR y los representantes del sector.</p>
+<p>— Borrador sujeto a revisión institucional —</p>
+<p>Rosario, Santa Fe — 2026</p>
+</div>
+<hr class="divider">
+<div class="section">
+  <h1 class="section-title">Documentos relacionados</h1>
+  <p>Este reglamento es el complemento operativo del documento principal <em>El corretaje inmobiliario: diagnóstico y ordenamiento del sistema</em>. Ambos deben leerse en conjunto.</p>
+  <p><a href="index.html" style="color:var(--blue);font-weight:600;">→ Documento principal</a> &nbsp;·&nbsp; <a href="reformas.html" style="color:var(--blue);font-weight:600;">→ Mapa de reformas institucionales</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
