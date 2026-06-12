@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa de Reformas Institucionales — Adscripto Inmobiliario 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2340;
+    --navy-mid: #1a3a5c;
+    --blue: #1d5fa8;
+    --blue-light: #2e75b6;
+    --gold: #c8a84b;
+    --gold-light: #e8c96a;
+    --cream: #faf8f3;
+    --warm-white: #f5f2eb;
+    --gray-text: #3d3d3d;
+    --gray-mid: #6b6b6b;
+    --gray-light: #e8e4db;
+    --red-soft: #8b2e2e;
+    --green-soft: #1e5c3a;
+    --sidebar-w: 280px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--gray-text);
+    line-height: 1.75;
+    font-size: 20px;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--navy);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 40px 0;
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: var(--navy); }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--blue-light); border-radius: 2px; }
+
+  .sidebar-header {
+    background: var(--navy-mid);
+    padding: 28px 24px 20px;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .sidebar-header .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-header .doc-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .nav-section {
+    padding: 20px 0 8px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 9px 24px 9px 24px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Source Serif 4', serif;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: white;
+    border-left-color: var(--gold);
+    background: rgba(255,255,255,0.05);
+  }
+
+  .nav-item.sub {
+    padding-left: 38px;
+    font-size: 17px;
+    opacity: 0.8;
+  }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  /* ── COVER ── */
+  #cover {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, #1a4a7a 100%);
+    padding: 80px 80px 70px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #cover::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border: 1px solid rgba(200,168,75,0.15);
+    border-radius: 50%;
+  }
+
+  #cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: 60px;
+    width: 300px; height: 300px;
+    border: 1px solid rgba(200,168,75,0.1);
+    border-radius: 50%;
+  }
+
+  .cover-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.15;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+
+  .cover-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+    max-width: 600px;
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  .cover-divider {
+    width: 80px;
+    height: 3px;
+    background: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .cover-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 1px;
+  }
+
+  /* ── CONTENT ── */
+  #content {
+    max-width: 820px;
+    padding: 60px 80px 100px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 64px;
+    padding-top: 16px;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  h1.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--gray-light);
+    line-height: 1.3;
+  }
+
+  h2.subsection-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy-mid);
+    margin: 36px 0 14px;
+    line-height: 1.4;
+  }
+
+  h3.sub-subsection {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 28px 0 10px;
+    letter-spacing: 0.3px;
+  }
+
+  p {
+    margin-bottom: 18px;
+    text-align: justify;
+    hyphens: auto;
+    font-size: 20px;
+    color: var(--gray-text);
+  }
+
+  p.destacado {
+    background: linear-gradient(to right, rgba(29,95,168,0.06), transparent);
+    border-left: 4px solid var(--blue-light);
+    padding: 16px 20px;
+    margin: 24px 0;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--navy-mid);
+    border-radius: 0 6px 6px 0;
+    text-align: left;
+  }
+
+  ul.bullets {
+    margin: 10px 0 20px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  ul.bullets li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    font-size: 17px;
+    border-bottom: 1px solid var(--gray-light);
+    color: var(--gray-text);
+  }
+
+  ul.bullets li:last-child { border-bottom: none; }
+
+  ul.bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 4px;
+    color: var(--gold);
+    font-size: 17px;
+    top: 10px;
+  }
+
+  ul.bullets li strong {
+    color: var(--navy);
+    display: block;
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+
+  /* ── CALL OUT BOXES ── */
+  .box-warning {
+    background: #fff8f0;
+    border: 1px solid #e8c080;
+    border-left: 5px solid var(--gold);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .box-warning .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .box-danger {
+    background: #fff5f5;
+    border: 1px solid #e8a0a0;
+    border-left: 5px solid var(--red-soft);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .box-danger .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--red-soft);
+    margin-bottom: 6px;
+  }
+
+  .box-key {
+    background: #f0f6ff;
+    border: 1px solid #a0c0e8;
+    border-left: 5px solid var(--blue);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 24px 0;
+  }
+
+  .box-key .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+
+  /* ── TWO COLUMN COMPARISON ── */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .col-good, .col-bad {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .col-good .col-head { background: var(--green-soft); color: white; padding: 10px 16px; font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; }
+  .col-bad .col-head { background: var(--red-soft); color: white; padding: 10px 16px; font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; }
+
+  .col-good .col-body { background: #f0fff5; border: 1px solid #b0ddc0; border-top: none; }
+  .col-bad .col-body { background: #fff5f5; border: 1px solid #e0b0b0; border-top: none; }
+
+  .col-body li { padding: 9px 14px; font-size: 17px; border-bottom: 1px solid rgba(0,0,0,0.06); list-style: none; }
+  .col-body li:last-child { border-bottom: none; }
+  .col-body li strong { display: block; font-size: 17px; color: var(--navy); margin-bottom: 1px; }
+
+  /* ── PHASES ── */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .phase {
+    background: white;
+    border: 1px solid var(--gray-light);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+  }
+
+  .phase-num {
+    width: 32px; height: 32px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 auto 10px;
+  }
+
+  .phase-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .phase-sub {
+    font-size: 17px;
+    color: var(--gray-mid);
+  }
+
+  /* ── BIBLIOGRAPHY ── */
+  .bib-group {
+    margin-bottom: 28px;
+  }
+
+  .bib-group-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gray-light);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+
+  .bib-item {
+    padding: 8px 0 8px 20px;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 17px;
+    color: var(--gray-text);
+    position: relative;
+  }
+
+  .bib-item:last-child { border-bottom: none; }
+
+  .bib-item::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gray-mid);
+    font-size: 17px;
+  }
+
+  .bib-item a {
+    color: var(--blue);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    display: block;
+    margin-top: 3px;
+    word-break: break-all;
+    opacity: 0.8;
+  }
+
+  .bib-item a:hover { opacity: 1; text-decoration: underline; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--gray-light);
+    margin: 48px 0;
+  }
+
+  .divider-gold {
+    border: none;
+    border-top: 2px solid var(--gold);
+    width: 60px;
+    margin: 32px 0;
+  }
+
+  /* ── FOOTER ── */
+  #footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.4);
+    padding: 28px 80px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── MOBILE TOGGLE ── */
+  #menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--navy);
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    #sidebar { transform: translateX(-280px); width: 280px; }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #menu-toggle { display: block; }
+    #cover { padding: 60px 32px 50px; }
+    .cover-title { font-size: 30px; }
+    #content { padding: 40px 32px 80px; }
+    #footer { padding: 20px 32px; flex-direction: column; gap: 8px; text-align: center; }
+    .comparison { grid-template-columns: 1fr; }
+    .phases { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+<style>
+.req-badge { display:inline-block; padding:0.25rem 0.8rem; border-radius:2px; font-size:0.8rem; font-weight:700; margin-bottom:1rem; letter-spacing:0.03em; }
+.req-easy { background:#e8f5e9; color:#1e5c3a; }
+.req-medium { background:#fff3e0; color:#8b4a00; }
+.req-hard { background:#fce4e4; color:#8b2e2e; }
+.check-row { display:flex; gap:0.5rem; margin-bottom:0.5rem; line-height:1.6; }
+.check-yes { color:#1e5c3a; font-weight:700; flex-shrink:0; }
+.check-no { color:#8b2e2e; font-weight:700; flex-shrink:0; }
+.step-block { border-left:4px solid var(--gold); padding:0.9rem 1.2rem; margin:1.2rem 0; background:var(--warm-white); }
+.step-label { font-family:'Playfair Display',serif; color:var(--gold); font-weight:700; font-size:1rem; margin-bottom:0.3rem; }
+.conclusion-box { background:var(--navy); color:rgba(255,255,255,0.9); padding:1.8rem 2rem; border-radius:4px; margin:2rem 0; }
+.conclusion-box h3 { color:var(--gold); font-family:'Playfair Display',serif; margin-bottom:0.8rem; }
+</style>
+</head>
+<body>
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">Corretaje 2026</div>
+    <div class="doc-title">Mapa de Reformas Institucionales</div>
+  </div>
+  <div class="nav-section">Instrumentos</div>
+  <a class="nav-item" href="#r1">1. Reglamento Tribunal</a>
+  <a class="nav-item" href="#r2">2. Estatuto del Colegio</a>
+  <a class="nav-item" href="#r3">3. Ley 13.154</a>
+  <div class="nav-section">Estrategia</div>
+  <a class="nav-item" href="#r4">4. Mapa de caminos</a>
+  <a class="nav-item" href="#r5">5. Orden sugerido</a>
+  <div class="nav-section" style="margin-top:1.5rem;">Navegar</div>
+  <a class="nav-item" href="index.html">← Documento principal</a>
+  <a class="nav-item" href="reglamento.html">← Reglamento</a>
+</nav>
+
+<div id="main">
+  <div id="cover">
+    <div class="cover-eyebrow">Documento de trabajo · 2026</div>
+    <div class="cover-title">Mapa de Reformas Institucionales</div>
+    <div class="cover-subtitle">Sistema de Adscripto Inmobiliario — Estrategia de implementación</div>
+    <div class="cover-meta">Reglamento del Tribunal · Estatuto del Colegio · Ley 13.154 · Rosario, Santa Fe — 2026</div>
+  </div>
+
+<div id="content">
+  <div class="section" id="intro">
+    <p>Este documento mapea las reformas necesarias para implementar el Sistema de Adscripto Inmobiliario, analiza qué puede hacerse sin reforma legislativa y qué requiere modificar la Ley 13.154, y propone el camino estratégico más viable. El sistema opera sobre tres instrumentos en cascada: el Reglamento del Tribunal de Ética, el Estatuto del Colegio y la Ley 13.154.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section" id="r1">
+    <div class="section-number">Instrumento 01</div>
+    <h1 class="section-title">Reglamento del Tribunal de Ética y Disciplina</h1>
+    <span class="req-badge req-easy">REQUISITO: 75% de los jueces de ambas salas — sin Asamblea ni Legislatura</span>
+
+    <h2 class="subsection-title">Cambios sugeridos</h2>
+    <p><strong>Artículo 1</strong> — Agregar que el procedimiento aplica también cuando el denunciado sea un Corredor Responsable por hechos vinculados a la actuación de un Adscripto Inmobiliario bajo su cargo.</p>
+    <p><strong>Artículo nuevo</strong> — Incorporar al Adscripto Inmobiliario como sujeto pasible de investigación y sanción disciplinaria. Las sanciones aplicables son apercibimiento, multa en unidades ius y cancelación del registro de adscripción.</p>
+    <p><strong>Artículo 42</strong> — Extender el régimen sancionatorio a los Adscriptos Inmobiliarios. Agregar la cancelación del registro de adscripción como sanción autónoma diferenciada de la cancelación de matrícula plena.</p>
+
+    <h2 class="subsection-title">Efectos</h2>
+    <div class="check-row"><span class="check-yes">✓</span> El Tribunal queda habilitado para investigar y sancionar Adscriptos y Corredores Responsables</div>
+    <div class="check-row"><span class="check-yes">✓</span> El procedimiento existente — sólido y probado — se aplica sin necesidad de crear uno nuevo</div>
+    <div class="check-row"><span class="check-yes">✓</span> Implementable en el corto plazo sin esperar nada externo</div>
+    <div class="check-row"><span class="check-no">✗</span> No otorga efectos jurídicos frente a terceros al registro de adscripción</div>
+    <div class="check-row"><span class="check-no">✗</span> No habilita el poder de policía hacia afuera del sistema colegial</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section" id="r2">
+    <div class="section-number">Instrumento 02</div>
+    <h1 class="section-title">Estatuto del Colegio</h1>
+    <span class="req-badge req-medium">REQUISITO: Asamblea Extraordinaria — quórum 50% — aprobación 2/3 de presentes</span>
+
+    <h2 class="subsection-title">Cambios sugeridos</h2>
+    <p><strong>Artículo 3</strong> — Agregar la facultad expresa de crear y administrar el Registro de Adscriptos Inmobiliarios.</p>
+    <p><strong>Artículo 45</strong> — Ampliar la competencia del Tribunal para incluir a los Adscriptos Inmobiliarios registrados y a los Corredores Responsables en su carácter de tales.</p>
+    <p><strong>Artículo 52</strong> — Agregar la cancelación del registro de adscripción como sanción aplicable, diferenciada de la cancelación de matrícula plena.</p>
+    <p><strong>Artículo nuevo</strong> — Definición estatutaria del Adscripto Inmobiliario como colaborador registrado ante el Colegio, sin matrícula propia, habilitado para actos preparatorios bajo la responsabilidad exclusiva de un Corredor Responsable.</p>
+
+    <h2 class="subsection-title">Efectos</h2>
+    <div class="check-row"><span class="check-yes">✓</span> El Colegio queda legalmente habilitado para crear y administrar el registro</div>
+    <div class="check-row"><span class="check-yes">✓</span> El Tribunal queda habilitado estatutariamente para sancionar Adscriptos y Corredores Responsables</div>
+    <div class="check-row"><span class="check-yes">✓</span> La figura del Adscripto Inmobiliario queda definida en el instrumento institucional más importante</div>
+    <div class="check-row"><span class="check-yes">✓</span> Sistema defendible jurídicamente ante cualquier cuestionamiento</div>
+    <div class="check-row"><span class="check-no">✗</span> Los efectos del registro siguen siendo internos — no obligan a terceros</div>
+    <div class="check-row"><span class="check-no">✗</span> El poder de policía hacia afuera sigue sin respaldo legal suficiente</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section" id="r3">
+    <div class="section-number">Instrumento 03</div>
+    <h1 class="section-title">Ley Provincial N° 13.154</h1>
+    <span class="req-badge req-hard">REQUISITO: Proyecto de ley — aprobación Legislatura — promulgación del Gobernador</span>
+
+    <h2 class="subsection-title">Cambios sugeridos</h2>
+    <p><strong>Artículo nuevo</strong> — Crear la figura del Adscripto Inmobiliario con definición legal, actos habilitados taxativos y efectos jurídicos frente a terceros.</p>
+    <p><strong>Artículo nuevo</strong> — Crear el Registro de Adscripción con carácter público y efectos jurídicos erga omnes — válido frente a todos, no solo internamente.</p>
+    <p><strong>Artículo nuevo</strong> — Ampliar el poder de policía del Colegio para sancionar directamente a quien ejerza actos de corretaje sin matrícula ni adscripción vigente, sin proceso judicial previo.</p>
+    <p><strong>Artículo nuevo</strong> — Responsabilidad solidaria expresa del Corredor Responsable por los actos del Adscripto Inmobiliario, con efectos civiles y disciplinarios frente a terceros.</p>
+
+    <div class="box-key">
+      <div class="box-label">Art. 53 — Nueva Constitución de Santa Fe, septiembre 2025</div>
+      <p style="margin:0">"La Provincia reconoce la existencia de los Colegios y Consejos Profesionales creados por ley." Este reconocimiento constitucional es el argumento más sólido para impulsar la reforma legislativa. La Nación puede desregular el comercio — la Provincia regula el ejercicio profesional de sus ciudadanos.</p>
+    </div>
+
+    <h2 class="subsection-title">Efectos</h2>
+    <div class="check-row"><span class="check-yes">✓</span> Sistema completo con efectos jurídicos plenos frente a todos</div>
+    <div class="check-row"><span class="check-yes">✓</span> Poder de policía real hacia afuera — el Colegio sanciona a quien opere sin registro</div>
+    <div class="check-row"><span class="check-yes">✓</span> Responsabilidad solidaria con efectos civiles directos frente a terceros</div>
+    <div class="check-row"><span class="check-yes">✓</span> Base legal indestructible ante cualquier cuestionamiento</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section" id="r4">
+    <div class="section-number">Sección 04</div>
+    <h1 class="section-title">Mapa de caminos — estrategia recomendada</h1>
+
+    <h2 class="subsection-title">Camino A — Solo Reglamento del Tribunal</h2>
+    <span class="req-badge req-easy">Dificultad baja — 75% de los jueces</span>
+    <p>El Tribunal puede investigar y sancionar. Útil como primer paso pero insuficiente solo — el registro no tiene efectos frente a terceros.</p>
+
+    <h2 class="subsection-title">Camino B — Reglamento + Estatuto (sin reforma legislativa)</h2>
+    <span class="req-badge req-medium">Dificultad media — requiere Asamblea Extraordinaria</span>
+    <p>El sistema más completo sin esperar la Legislatura. El Colegio registra Adscriptos, el Tribunal los sanciona, todo tiene respaldo estatutario. La limitación real: quien opere fuera del sistema no puede ser sancionado directamente — solo denunciado a la Justicia.</p>
+    <p class="destacado"><strong>ES EL CAMINO MÁS REALISTA A CORTO PLAZO.</strong> Implementar el sistema colegial primero no es una renuncia a la reforma de la ley — es el camino que la hace posible y necesaria. Un sistema funcionando es el argumento más poderoso ante la Legislatura.</p>
+
+    <h2 class="subsection-title">Camino C — Todo junto (con reforma legislativa)</h2>
+    <span class="req-badge req-hard">Dificultad alta — depende de la Legislatura</span>
+    <p>Sistema completo con todos los efectos jurídicos plenos. Escenario ideal pero el más largo. Estrategia: arrancar con el Camino B e impulsar la reforma legislativa en paralelo.</p>
+
+    <h2 class="subsection-title">Camino D — Esperar reforma legislativa primero</h2>
+    <span class="req-badge req-hard">NO RECOMENDADO</span>
+    <p>El más lento y el más dependiente. Sin datos de un sistema funcionando, el proyecto legislativo tiene menos fuerza política. Mientras tanto la informalidad sigue creciendo.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section" id="r5">
+    <div class="section-number">Sección 05</div>
+    <h1 class="section-title">Orden de implementación sugerido</h1>
+
+    <div class="step-block">
+      <div class="step-label">PASO 1 — Modificar el Reglamento del Tribunal <span style="font-size:0.85rem;font-weight:400;color:var(--gray-mid);font-style:italic;">inmediato</span></div>
+      <p style="margin:0">Obtener el 75% de los jueces. Ampliar competencia para incluir Adscriptos y Corredores Responsables. Costo político bajo, impacto inmediato.</p>
+    </div>
+
+    <div class="step-block">
+      <div class="step-label">PASO 2 — Convocar Asamblea Extraordinaria para reformar el Estatuto <span style="font-size:0.85rem;font-weight:400;color:var(--gray-mid);font-style:italic;">corto plazo</span></div>
+      <p style="margin:0">Definir la figura del Adscripto Inmobiliario. Crear el Registro. Ampliar competencia del Tribunal. Con el Reglamento ya modificado, la Asamblea tiene base más sólida.</p>
+    </div>
+
+    <div class="step-block">
+      <div class="step-label">PASO 3 — Implementar con los datos de la encuesta <span style="font-size:0.85rem;font-weight:400;color:var(--gray-mid);font-style:italic;">simultáneo</span></div>
+      <p style="margin:0">Los resultados de la encuesta a los 2.000 matriculados de COCIR dan el respaldo empírico. Un sistema con apoyo documentado es mucho más sólido institucionalmente.</p>
+    </div>
+
+    <div class="step-block">
+      <div class="step-label">PASO 4 — Presentar proyecto de reforma de la Ley 13.154 <span style="font-size:0.85rem;font-weight:400;color:var(--gray-mid);font-style:italic;">mediano plazo</span></div>
+      <p style="margin:0">Con el sistema funcionando y el Art. 53 de la nueva Constitución Provincial como respaldo, el proyecto legislativo tiene argumentos concretos. El momento más favorable es antes de que la desregulación nacional avance.</p>
+    </div>
+
+    <div class="step-block">
+      <div class="step-label">PASO 5 — Expansión a otros Colegios provinciales <span style="font-size:0.85rem;font-weight:400;color:var(--gray-mid);font-style:italic;">largo plazo</span></div>
+      <p style="margin:0">Con el sistema funcionando en Rosario y respaldo legislativo en Santa Fe, el modelo puede presentarse ante COFECI y otros Colegios como modelo replicable.</p>
+    </div>
+
+    <div class="conclusion-box">
+      <h3>Síntesis estratégica</h3>
+      <p>El Camino B — Reglamento del Tribunal + Estatuto — permite avanzar ahora sin depender de la Legislatura, y construye la evidencia que hace posible el Camino C después. Implementar el sistema colegial primero no es una concesión: es la estrategia más inteligente disponible.</p>
+      <p style="margin-top:1rem;color:var(--gold);font-weight:700;font-size:1.1rem;font-family:'Playfair Display',serif;">Inclusión con legalidad.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="section">
+    <p><a href="index.html" style="color:var(--blue);font-weight:600;">→ Documento principal</a> &nbsp;·&nbsp; <a href="reglamento.html" style="color:var(--blue);font-weight:600;">→ Reglamento del Adscripto Inmobiliario</a></p>
+  </div>
+</div>
+</div>
+</body>
+</html>
