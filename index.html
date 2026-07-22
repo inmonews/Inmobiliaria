@@ -111,6 +111,43 @@
     opacity: 0.8;
   }
 
+
+  /* ── DEBATE BLOCKS VERTICAL ── */
+  .debate-v {
+    margin: 1.4rem 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .debate-v-gobierno {
+    background: #fff5f5;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    border-bottom: 2px solid #e8b0b0;
+    color: var(--gray-text);
+  }
+  .debate-v-respuesta {
+    background: #f0fff5;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--gray-text);
+  }
+  .debate-v-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .debate-v-tag.gobierno { background: #8b2e2e; color: white; }
+  .debate-v-tag.respuesta { background: #1e5c3a; color: white; }
+
   /* ── MAIN ── */
   #main {
     margin-left: var(--sidebar-w);
@@ -689,33 +726,67 @@
         <p style="margin:0">No existe voluntad judicial uniforme de combatir este fenómeno. Más de un centenar de causas siguen en proceso en Buenos Aires con resultado incierto. Continuar exclusivamente por esta vía no protege a nadie.</p>
       </div>
 
-      <h2 class="subsection-title" id="s2-3">2.3 La amenaza de la desregulación estatal</h2>
-      <div class="box-danger">
-        <div class="box-label">⚠ Confirmado — 27 de abril de 2026</div>
-        <p style="margin:0">Sturzenegger confirmó en un evento del sector inmobiliario que ha anunciado su intención de enviar al Congreso la desregulación del corretaje inmobiliario. No es una amenaza futura: es una fecha concreta con cinco semanas de plazo.</p>
-      </div>
-      <p>El diputado del PRO Alejandro Bongiovanni presentó en mayo de 2025 el proyecto "Ley de Libertad Inmobiliaria" (Expediente 2586-D-2025), que modifica la Ley N° 20.266 con cinco cambios concretos: eliminar la matrícula obligatoria y el título universitario; suprimir la inscripción en Colegios profesionales; eliminar restricciones geográficas; derogar sanciones por ejercer sin matrícula; y eliminar aranceles mínimos y honorarios fijos. En paralelo, el Ministerio de Desregulación a cargo de Sturzenegger trabaja en un decreto que podría avanzar antes que el proyecto legislativo.</p>
-      <div class="box-danger">
-        <div class="box-label">Los números reales — el argumento del "encarecimiento" desmontado</div>
-        <p style="margin:0">Cuota anual 2026: Colegio de Buenos Aires <strong>$800.000</strong> · CUCICBA <strong>$650.000</strong> · Entre Ríos <strong>$38.500 mensuales</strong>. La matrícula más cara del país ronda los <strong>670 dólares anuales</strong> — menos de 56 dólares por mes. Ningún Colegio del país tiene matrícula cercana a los 3 millones de pesos. El argumento de encarecimiento es, con datos, directamente falso.</p>
-      </div>
-      <p>Sobre la eliminación del título universitario: cuando el Estado dice que no hace falta formarse para ejercer una profesión, le dice a toda la sociedad que estudiar no tiene recompensa. Si podés intermediar en la compraventa de una propiedad sin título, ¿para qué estudiar? La baja de la vara no afecta solo al servicio — afecta a la cultura.</p>
-      <p>Sobre la eliminación de la restricción geográfica: un corredor de Rosario no puede ir a mostrar un departamento en Mendoza de manera económicamente viable. La única entidad que puede cubrir todo el territorio nacional es una franquicia con estructura centralizada y escala masiva. Esta medida no democratiza el mercado — lo concentra en los operadores más grandes, dejando al ciudadano con menos asesoramiento local y a los profesionales independientes sin trabajo.</p>
-      <p>Hay un antecedente histórico que el debate omite sistemáticamente. El Decreto 2284/91, impulsado por Domingo Cavallo en el Plan de Desregulación Económica, intentó eliminar honorarios mínimos profesionales y barreras de entrada en las profesiones liberales. La resistencia de los Colegios y la jurisprudencia posterior consolidaron un criterio claro: la regulación del ejercicio profesional es competencia exclusiva de las provincias. La Corte Suprema ratificó que los jueces provinciales son los únicos competentes para revisar la constitucionalidad de las leyes sobre el ejercicio de profesiones como el corretaje. El gobierno actual repite el mismo movimiento que fracasó hace 35 años.</p>
+                  <h2 class="subsection-title" id="s2-3">2.3 El proyecto de desregulación</h2>
 
-      <p>Hay además una dimensión de seguridad financiera que el proyecto ignora por completo: los corredores inmobiliarios matriculados son sujetos obligados ante la UIF y el GAFI. La desregulación eliminaría esa figura y con ella toda la trazabilidad financiera del mercado inmobiliario. Este punto se desarrolla en detalle en la <strong>Sección 8</strong>.</p>
-      <div class="box-danger">
-        <div class="box-label">Quién está detrás — el dato que el debate no muestra</div>
-        <p style="margin:0">Jorge Amoreo Casotti, fundador de Pint —una startup proptech—, es el principal impulsor privado de la desregulación, con acceso directo a Sturzenegger. Fue propuesto para un cargo en la Cámara Inmobiliaria Argentina y la propia comisión directiva lo rechazó dos veces. Hoy vuelve por la ventana del gobierno. <strong>Las proptechs son las grandes ganadoras si caen los Colegios.</strong> El "libertarismo inmobiliario" tiene destinatario específico: no el ciudadano, sino las plataformas tecnológicas que aspiran a cobrar comisiones sin responsabilidad legal.</p>
+      <p>El gobierno nacional ha mostrado su intención de avanzar con la desregulación del corretaje inmobiliario. Hubo un primer intento en 2025 — el proyecto "Ley de Libertad Inmobiliaria" del diputado Bongiovanni — que mostró las cartas pero no prosperó. Hoy un nuevo anteproyecto va más lejos: modifica directamente el Código Civil y Comercial para establecer que para ejercer el corretaje <strong>solo se requiere ser mayor de edad y tener título secundario</strong>. El artículo clave usa la palabra "sólo" — una cláusula de preempción que pretende que ninguna ley provincial pueda agregar requisitos. El propio anteproyecto crea inhabilidades (fallidos, inhibidos, condenados) pero no crea ningún registro ni autoridad que las verifique: hoy eso lo hace el Colegio al matricular. Sin matrícula, las inhabilidades son declarativas — se verifican cuando la estafa ya ocurrió. Además, el Título X del anteproyecto delega en el Ejecutivo la facultad de eliminar por decreto todo lo que considere "barrera de entrada", incluyendo matrículas y habilitaciones profesionales. Lo que no lograron escribir en el texto lo dejaron como delegación abierta.</p>
+
+      <p>Los argumentos que impulsan la desregulación son conocidos. Cada uno tiene respuesta.</p>
+
+      <div class="debate-v">
+        <div class="debate-v-gobierno">
+          <span class="debate-v-tag gobierno">El gobierno dice</span>
+          El título universitario y la matrícula encarecen el acceso a la profesión y generan barreras artificiales que perjudican al consumidor.
+        </div>
+        <div class="debate-v-respuesta">
+          <span class="debate-v-tag respuesta">La realidad</span>
+          El título no encarece nada para el ciudadano — solo garantiza que quien lo asesora sabe lo que hace. Cuando el Estado dice que no hace falta formarse para ejercer una profesión, le dice a toda la sociedad que estudiar no tiene recompensa. La dirección natural de todas las profesiones es más especialización, no menos. Entre Ríos ya exige licenciatura de grado. Rosario creó la primera licenciatura pública del país en corretaje inmobiliario — en la Universidad Nacional de Rosario. <strong>Desregular en 2026 no es modernizar: es ir a contramano de lo que la propia sociedad eligió.</strong>
+        </div>
       </div>
-      <p>El argumento central del proyecto — que los Colegios aplican sanciones "discrecionales sin control judicial" — ya fue rechazado por la Cámara Nacional de Apelaciones en lo Contencioso Administrativo Federal, que resolvió que las sanciones sobre matriculados son competencia exclusiva del Colegio profesional, y que cualquier sanción aplicada por fuera viola el principio de reserva legal. La potestad disciplinaria colegial no es arbitraria: es una delegación expresa de la ley, con proceso, garantías y recurso contencioso posterior.</p>
-      <p>Desde el punto de vista jurídico, la regulación de las profesiones liberales es competencia exclusiva de las provincias (Art. 121 CN), ya que no es una potestad delegada al Gobierno Nacional. Santa Fe sancionó la Ley 13.154 y esa regulación no puede ser derogada unilateralmente por decreto nacional. Ese escudo acaba de fortalecerse de manera histórica.</p>
+
+      <div class="debate-v">
+        <div class="debate-v-gobierno">
+          <span class="debate-v-tag gobierno">El gobierno dice</span>
+          La restricción geográfica limita la competencia y el libre ejercicio profesional en todo el país.
+        </div>
+        <div class="debate-v-respuesta">
+          <span class="debate-v-tag respuesta">La realidad</span>
+          Un profesional de Rosario no puede cubrir Mendoza de manera económicamente viable. La única entidad que puede cubrir todo el territorio nacional es una franquicia con estructura centralizada y escala masiva. Esta medida no democratiza el sector — lo concentra en los operadores más grandes, dejando al ciudadano con menos asesoramiento local y a los profesionales independientes sin trabajo.
+        </div>
+      </div>
+
+      <div class="debate-v">
+        <div class="debate-v-gobierno">
+          <span class="debate-v-tag gobierno">El gobierno dice</span>
+          Los Colegios aplican sanciones discrecionales sin control judicial, lo que viola el derecho a trabajar libremente.
+        </div>
+        <div class="debate-v-respuesta">
+          <span class="debate-v-tag respuesta">La realidad</span>
+          Este argumento ya fue rechazado por la Cámara Nacional de Apelaciones, que resolvió que las sanciones sobre matriculados son competencia exclusiva del Colegio profesional. El sancionado siempre puede apelar ante la Justicia Provincial. El antecedente es claro: el Decreto 2284/91 de Cavallo intentó lo mismo y fracasó — la regulación del ejercicio profesional es competencia exclusiva de las provincias desde 1853. El gobierno actual repite un movimiento que ya perdió.
+        </div>
+      </div>
+
+      <div class="debate-v">
+        <div class="debate-v-gobierno">
+          <span class="debate-v-tag gobierno">El gobierno dice</span>
+          La tecnología hace innecesaria la intermediación profesional regulada. Las plataformas digitales son más eficientes y accesibles.
+        </div>
+        <div class="debate-v-respuesta">
+          <span class="debate-v-tag respuesta">La realidad</span>
+          Las plataformas tecnológicas inmobiliarias — proptechs — no son un servicio neutral: son empresas que escalan globalmente, concentran el acceso a la información y capturan el sector. Lo que en otros rubros se llamó uberización está llegando al corretaje. El resultado es la pérdida de soberanía del sector local, la desaparición del vínculo persona a persona, y la transferencia de datos sensibles de miles de ciudadanos a capitales que no tienen arraigo, no responden ante nadie y no dejan nada en el territorio. No es casualidad que el principal impulsor privado de la desregulación sea el fundador de una startup proptech con acceso directo al gobierno. <strong>Las proptechs son las grandes ganadoras si caen los Colegios.</strong>
+        </div>
+      </div>
+
+      <div class="box-danger">
+        <div class="box-label">El argumento que el gobierno no menciona — UIF y GAFI</div>
+        <p>Los corredores inmobiliarios matriculados son <strong>sujetos obligados ante la UIF</strong> desde 2012, obligación reforzada por la Resolución UIF 43/2024 en concordancia con los estándares del GAFI. La desregulación no solo elimina esa obligación — <strong>elimina la figura del sujeto obligado</strong>. Si cualquier persona puede intermediar sin matrícula, ¿sobre quién ejerce la UIF su poder de policía? ¿Quién reporta las operaciones sospechosas? La respuesta es nadie. El sector inmobiliario — uno de los principales vectores de lavado de activos en el mundo — quedaría sin sujeto obligado identificable. Este punto se desarrolla en la <strong>Sección 8</strong>.</p>
+      </div>
+
       <div class="box-key">
-        <div class="box-label">Artículo 53 — Nueva Constitución de Santa Fe, septiembre 2025</div>
-        <p style="margin:0"><strong>"La Provincia reconoce la existencia de los Colegios y Consejos Profesionales creados por ley."</strong> El gobierno nacional quiere desregular. La Constitución provincial acaba de reconocer explícitamente lo que el gobierno quiere eliminar. Son dos movimientos en dirección exactamente opuesta — y la Constitución provincial gana.</p>
+        <div class="box-label">El blindaje constitucional — Art. 53 de la nueva Constitución de Santa Fe</div>
+        <p>La nueva Constitución Provincial, promulgada en septiembre de 2025, reconoce expresamente la existencia de los Colegios y Consejos Profesionales en su Artículo 53. La Nación puede desregular el comercio. La Provincia regula el ejercicio profesional de sus ciudadanos — y esa es una facultad no delegada desde 1853.</p>
       </div>
 
-      <h2 class="subsection-title" id="s2-4">2.4 La amenaza adicional: el antecedente CNV</h2>
+<h2 class="subsection-title" id="s2-4">2.4 La amenaza adicional: el antecedente CNV</h2>
       <p>Existe una amenaza concreta que raramente se menciona: el gobierno nacional ya tiene un mecanismo probado para habilitar a personas a ejercer actividades de asesoramiento financiero sin título universitario: el Registro de Idóneos de la CNV. La adscripción colegial es exactamente lo contrario: no baja la vara de la formación universitaria — la absorbe la informalidad del mercado para obligarla a estudiar bajo los convenios con la UNR y la UNL. El Colegio no matricula idóneos: crea un tránsito formativo obligatorio hacia la profesión plena.</p>
       <p>Cualquier persona mayor de 18 años con título secundario puede rendir un examen de idoneidad ante la CNV, sin obligación de cursar previamente. Aprobado el examen, se inscribe en el Registro Público de Idóneos y queda habilitada para asesorar al público inversor bajo supervisión de un agente autorizado. La CNV tiene poder de sanción directo, sin proceso judicial.</p>
       <div class="box-danger">
