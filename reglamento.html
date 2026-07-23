@@ -9,13 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #0f2340;
-    --navy-mid: #1a3a5c;
-    --blue: #1d5fa8;
-    --blue-light: #2e75b6;
-    --gold: #c8a84b;
-    --gold-light: #e8c96a;
-    --cream: #faf8f3;
+    --navy: #2a2a2a;
+    --navy-mid: #3d3d3d;
+    --blue: #c4623a;
+    --blue-light: #d4845a;
+    --gold: #d4845a;
+    --gold-light: #e8a882;
+    --cream: #faf9f7;
     --warm-white: #f5f2eb;
     --gray-text: #3d3d3d;
     --gray-mid: #6b6b6b;
@@ -111,6 +111,32 @@
     font-size: 17px;
     opacity: 0.8;
   }
+
+
+  /* ── NAV DOCS BUTTONS ── */
+  .nav-doc-links {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav-doc-link {
+    display: block; padding: 7px 12px;
+    color: var(--navy) !important; background: var(--gold);
+    text-decoration: none; font-size: 12px;
+    font-family: 'Source Serif 4', serif; border-radius: 3px;
+    font-weight: 600; transition: all 0.2s; line-height: 1.4;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-align: center;
+  }
+  .nav-doc-link:hover { background: var(--gold-light); }
+  .nav-doc-link.outline {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.8) !important;
+  }
+  .nav-doc-link.outline:hover { background: rgba(255,255,255,0.15); color: white !important; }
 
   /* ── MAIN ── */
   #main {
@@ -551,6 +577,11 @@
     <div class="logo">Corretaje 2026</div>
     <div class="doc-title">Reglamento del Sistema de Adscripto Inmobiliario</div>
   </div>
+  <div class="nav-doc-links">
+  <a class="nav-doc-link" href="index.html">← Índice</a>
+  <a class="nav-doc-link outline" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html">Documento principal →</a>
+  <a class="nav-doc-link outline" href="reformas.html">Mapa de reformas →</a>
+  </div>
   <div class="nav-section">Capítulos</div>
   <a class="nav-item" href="#c1">Nota preliminar</a>
   <a class="nav-item" href="#c2">Cap. I Objeto y ámbito de aplicación</a>
@@ -562,9 +593,6 @@
   <a class="nav-item" href="#c8">Cap. VI bis Deberes éticos del Adscrip…</a>
   <a class="nav-item" href="#c9">Cap. VIII Período de transición</a>
   <a class="nav-item" href="#c10">Cap. IX Horizonte de desarrollo del si…</a>
-  <div class="nav-section" style="margin-top:1.5rem;">Navegar</div>
-  <a class="nav-doc-link" href="index.html">← Documento principal</a>
-  <a class="nav-doc-link" href="reformas.html">→ Mapa de reformas</a>
 </nav>
 <div id="main">
   <div id="cover">
@@ -614,9 +642,8 @@
 <p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 16.</strong> El Corredor Matriculado que acepta a un Adscripto Inmobiliario declara formalmente ante el Colegio que: (a) conoce la identidad y antecedentes del aspirante; (b) asume responsabilidad solidaria por las operaciones en que el Adscripto Inmobiliario intervenga; (c) se compromete a supervisar su accionar; y (d) acepta hacerse cargo del costo íntegro de la adscripción anual.</p>
 <p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 17.</strong> El vínculo entre el Adscripto Inmobiliario y el Corredor es de carácter exclusivo. Un Adscripto Inmobiliario trabaja para un único Corredor Matriculado en todo momento. Queda expresamente prohibido actuar para más de un corredor de manera simultánea, aunque sea en jurisdicciones distintas.</p>
 <p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 18.</strong> Cada Corredor Responsable puede tener a su cargo un máximo de cinco (5) Adscriptos Inmobiliarios registrados en forma simultánea. Este límite responde a la capacidad de supervisión efectiva que puede ejercer un profesional sobre colaboradores en el mercado inmobiliario, y podrá ser revisado por el Directorio del Colegio en función de la experiencia acumulada en la implementación del sistema. Una inmobiliaria puede contar con varios Corredores Responsables, ampliando su capacidad operativa de manera proporcional a su estructura profesional.</p>
-<p>Artículo 18 bis. Asociación de Corredores Responsables. Dos o más Corredores Responsables pueden declarar ante el Colegio una asociación operativa a los efectos del presente Reglamento, mediante presentación firmada por todos los asociados. La asociación no requiere forma jurídica societaria específica — la estructura legal entre los corredores es materia de su exclusivo acuerdo privado. El efecto institucional de la declaración es la responsabilidad solidaria: cada Corredor Responsable asociado responde ante el Colegio y ante los ciudadanos por los actos de todos los Adscriptos Inmobiliarios registrados bajo cualquiera de los corredores de la asociación, sin distinción. El límite de cinco (5) Adscriptos Inmobiliarios por Corredor Responsable se mantiene individualmente — una asociación de dos corredores puede tener hasta diez (10) Adscriptos en total, pero cada corredor no puede superar su límite propio. La asociación debe registrarse ante el Colegio y cualquier modificación o disolución debe notificarse dentro de los diez (10) días hábiles de producida.
-
-Artículo 19.  El cambio de Corredor responsable requiere: (a) comunicación formal del Adscripto Inmobiliario al Colegio; (b) aceptación formal del nuevo Corredor; (c) baja del registro del corredor anterior. Durante el proceso de transferencia, el Adscripto Inmobiliario no puede operar válidamente. El corredor saliente queda liberado de responsabilidad por las operaciones posteriores a la fecha de registro de la transferencia.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 18 bis.</strong> Asociación de Corredores Responsables. Dos o más Corredores Responsables pueden declarar ante el Colegio una asociación operativa a los efectos del presente Reglamento, mediante presentación firmada por todos los asociados. La asociación no requiere forma jurídica societaria específica — la estructura legal entre los corredores es materia de su exclusivo acuerdo privado. El efecto institucional de la declaración es la responsabilidad solidaria: cada Corredor Responsable asociado responde ante el Colegio y ante los ciudadanos por los actos de todos los Adscriptos Inmobiliarios registrados bajo cualquiera de los corredores de la asociación, sin distinción. El límite de cinco (5) Adscriptos Inmobiliarios por Corredor Responsable se mantiene individualmente — una asociación de dos corredores puede tener hasta diez (10) Adscriptos en total, pero cada corredor no puede superar su límite propio. La asociación debe registrarse ante el Colegio y cualquier modificación o disolución debe notificarse dentro de los diez (10) días hábiles de producida.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 19.</strong> El cambio de Corredor responsable requiere: (a) comunicación formal del Adscripto Inmobiliario al Colegio; (b) aceptación formal del nuevo Corredor; (c) baja del registro del corredor anterior. Durante el proceso de transferencia, el Adscripto Inmobiliario no puede operar válidamente. El corredor saliente queda liberado de responsabilidad por las operaciones posteriores a la fecha de registro de la transferencia.</p>
 </div>
 <hr class="divider">
 <div class="section" id="c5">
@@ -674,9 +701,9 @@ Presentar ofertas al Corredor Matriculado para su evaluación y procesamiento.</
 <hr class="divider">
 <div class="section" id="c8">
 <div class="section-number">Cap. VI</div>
-<h1 class="section-title">Capítulo VI bis — Deberes éticos del Adscripto Inmobiliario
+<h1 class="section-title">Capítulo VI bis — Deberes éticos del Adscripto Inmobiliario</h1>
 
-Artículo 29 bis. Principios generales. El Adscripto Inmobiliario debe ejercer su actividad con honestidad, lealtad y buena fe hacia todas las partes intervinientes en las operaciones en que participe, sujetándose a las normas de ética del Colegio en todo lo que resulte compatible con su condición.
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 29 bis. Principios generales. El Adscripto Inmobiliario debe ejercer su actividad con honestidad, lealtad y buena fe hacia todas las partes intervinientes en las operaciones en que participe, sujetándose a las normas de ética del Colegio en todo lo que resulte compatible con su condición.
 
 Artículo 29 ter. Deberes específicos. Son deberes del Adscripto Inmobiliario:
 
@@ -692,9 +719,9 @@ e) Autorización previa: no iniciar ninguna gestión sobre un inmueble sin que e
 
 f) Colaboración institucional: colaborar con las investigaciones del Tribunal de Disciplina y Ética, responder las citaciones del Colegio en tiempo y forma, y notificar al Corredor Responsable cualquier situación irregular que conozca en el ejercicio de su actividad.
 
-g) Actualización: cumplir con los requisitos de formación y actualización establecidos en el Capítulo X del presente Reglamento como condición de habilitación vigente.
+g) Actualización: cumplir con los requisitos de formación y actualización establecidos en el Capítulo X del presente Reglamento como condición de habilitación vigente.</strong> 
+<h1 class="section-title">Capítulo VII — Régimen de sanciones</h1>
 
-Capítulo VII — Régimen de sanciones</h1>
 <p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 30.</strong> El presente capítulo opera en el marco del Reglamento del Tribunal de Ética y Disciplina Profesional de COCIR y de la Ley Provincial N° 13.154, a los que remite supletoriamente en todo lo no previsto. Las sanciones aquí establecidas alcanzan a los Adscriptos Inmobiliarios registrados y a los Corredores Responsables en su carácter de tales. El alcance pleno del poder de policía hacia afuera del sistema colegial quedará sujeto a la reforma de la Ley 13.154, cuyo impulso ante la Legislatura provincial forma parte de la estrategia institucional del Colegio.
 
 El Tribunal de Disciplina y Ética del Colegio tiene plenas facultades para instruir sumarios, resolver y aplicar sanciones a los Adscriptos Inmobiliarios, sin necesidad de proceso judicial previo. Las sanciones se gradúan conforme a la gravedad de la falta, con atenuantes y agravantes, y se orientan tanto a la corrección como al aprendizaje profesional.
@@ -804,8 +831,8 @@ Artículo 43. Costos del sistema de formación. El Curso de Formación Inicial t
 Artículo 44. Habilitación directa para titulados universitarios. El profesional que acredite título universitario de Corredor Inmobiliario o Licenciado en Actividad Inmobiliaria reconocido por el Ministerio de Educación queda eximido del Curso de Formación Inicial y del Curso de Actualización anual, y puede registrarse como Adscripto Inmobiliario con habilitación plena desde el inicio, previo pago de la adscripción anual. El título universitario reemplaza ambos cursos del sistema. Esta exención no se aplica al Corredor Responsable, cuyas obligaciones de formación continua se rigen por las normas de la matrícula plena.
 
 Artículo 45. Ventana de regularización — Período de transición especial. Durante los noventa (90) días corridos desde la entrada en vigencia del presente sistema, los Corredores Responsables que actualmente cuenten con personas operando informalmente bajo su estructura tienen la oportunidad de regularizar esa situación inscribiéndolas como Adscriptos Inmobiliarios en estado &amp;quot;en formación&amp;quot;, abonando la adscripción correspondiente e inscribiéndolas en el Curso de Formación Inicial. Vencida esta ventana, el ingreso al sistema requiere haber completado y aprobado el Curso de Formación Inicial con carácter previo a la inscripción, salvo para quienes acrediten título universitario habilitante conforme al artículo anterior. Quien opere fuera del sistema vencida la ventana incurre en infracción gravísima conforme al artículo 31 del presente Reglamento.</p>
-<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 38.</strong> El Colegio establecerá, en acuerdo con la UNR y con los organismos académicos correspondientes, un sistema de reconocimiento de equivalencias que permita al Adscripto Inmobiliario computar su formación y experiencia acreditada hacia los requisitos de la carrera de Corredor Inmobiliario, facilitando la progresión natural dentro del sistema.</p>
-<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 39.</strong> A mediano plazo, el Colegio evaluará la conveniencia de elevar progresivamente los requisitos de formación para la adscripción, en consonancia con el desarrollo del sector y con el fortalecimiento institucional del sistema. Toda modificación en ese sentido requerirá un proceso de consulta con los Colegios participantes, la UNR y los representantes del sector.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 46.</strong> El Colegio establecerá, en acuerdo con la UNR y con los organismos académicos correspondientes, un sistema de reconocimiento de equivalencias que permita al Adscripto Inmobiliario computar su formación y experiencia acreditada hacia los requisitos de la carrera de Corredor Inmobiliario, facilitando la progresión natural dentro del sistema.</p>
+<p style="margin:0.6rem 0 1rem;line-height:1.75;"><strong style="color:var(--navy);">Artículo 47.</strong> A mediano plazo, el Colegio evaluará la conveniencia de elevar progresivamente los requisitos de formación para la adscripción, en consonancia con el desarrollo del sector y con el fortalecimiento institucional del sistema. Toda modificación en ese sentido requerirá un proceso de consulta con los Colegios participantes, la UNR y los representantes del sector.</p>
 <p>— Borrador sujeto a revisión institucional —</p>
 <p>Rosario, Santa Fe — 2026</p>
 </div>
