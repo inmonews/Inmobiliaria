@@ -148,6 +148,32 @@
   .debate-v-tag.gobierno { background: #8b2e2e; color: white; }
   .debate-v-tag.respuesta { background: #1e5c3a; color: white; }
 
+
+  /* ── NAV DOCS BUTTONS ── */
+  .nav-doc-links {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav-doc-link {
+    display: block; padding: 7px 12px;
+    color: var(--navy) !important; background: var(--gold);
+    text-decoration: none; font-size: 12px;
+    font-family: 'Source Serif 4', serif; border-radius: 3px;
+    font-weight: 600; transition: all 0.2s; line-height: 1.4;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-align: center;
+  }
+  .nav-doc-link:hover { background: var(--gold-light); }
+  .nav-doc-link.outline {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.8) !important;
+  }
+  .nav-doc-link.outline:hover { background: rgba(255,255,255,0.15); color: white !important; }
+
   /* ── MAIN ── */
   #main {
     margin-left: var(--sidebar-w);
