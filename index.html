@@ -5,1437 +5,275 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>El corretaje inmobiliario: diagnóstico y ordenamiento del sistema</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #0f2340;
-    --navy-mid: #1a3a5c;
-    --blue: #1d5fa8;
-    --blue-light: #2e75b6;
-    --gold: #c8a84b;
-    --gold-light: #e8c96a;
-    --cream: #faf8f3;
+    --navy: #2a2a2a;
+    --navy-mid: #3d3d3d;
+    --blue: #c4623a;
+    --blue-light: #d4845a;
+    --gold: #d4845a;
+    --gold-light: #e8a882;
+    --cream: #faf9f7;
     --warm-white: #f5f2eb;
-    --gray-text: #3d3d3d;
-    --gray-mid: #6b6b6b;
-    --gray-light: #e8e4db;
-    --red-soft: #8b2e2e;
-    --green-soft: #1e5c3a;
-    --sidebar-w: 280px;
+    --gray-text: #2d2d2d;
+    --gray-mid: #666;
+    --border: rgba(0,0,0,0.09);
   }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--cream); color: var(--gray-text); }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Source Serif 4', Georgia, serif;
-    background: var(--cream);
-    color: var(--gray-text);
-    line-height: 1.75;
-    font-size: 20px;
-  }
-
-  /* ── SIDEBAR ── */
-  #sidebar {
-    position: fixed;
-    top: 0; left: 0;
-    width: var(--sidebar-w);
-    height: 100vh;
-    background: var(--navy);
-    overflow-y: auto;
-    z-index: 100;
-    padding: 0 0 40px 0;
-    transition: transform 0.3s ease;
-  }
-
-  #sidebar::-webkit-scrollbar { width: 4px; }
-  #sidebar::-webkit-scrollbar-track { background: var(--navy); }
-  #sidebar::-webkit-scrollbar-thumb { background: var(--blue-light); border-radius: 2px; }
-
-  .sidebar-header {
-    background: var(--navy-mid);
-    padding: 28px 24px 20px;
-    border-bottom: 2px solid var(--gold);
-  }
-
-  .sidebar-header .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-
-  .sidebar-header .doc-title {
-    font-family: 'Source Serif 4', serif;
-    font-size: 17px;
-    color: rgba(255,255,255,0.85);
-    line-height: 1.5;
-    font-style: italic;
-  }
-
-  .nav-section {
-    padding: 20px 0 8px 24px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--gold);
-    opacity: 0.7;
-  }
-
-  .nav-item {
-    display: block;
-    padding: 9px 24px 9px 24px;
-    color: rgba(255,255,255,0.65);
-    text-decoration: none;
-    font-size: 17px;
-    font-family: 'Source Serif 4', serif;
-    border-left: 3px solid transparent;
-    transition: all 0.2s;
-    line-height: 1.4;
-  }
-
-  .nav-item:hover, .nav-item.active {
-    color: white;
-    border-left-color: var(--gold);
-    background: rgba(255,255,255,0.05);
-  }
-
-  .nav-item.sub {
-    padding-left: 38px;
-    font-size: 17px;
-    opacity: 0.8;
-  }
-
-
-  /* ── DEBATE BLOCKS VERTICAL ── */
-  .debate-v {
-    margin: 1.4rem 0;
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
-  .debate-v-gobierno {
-    background: #fff5f5;
-    padding: 0.8rem 1.2rem;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    border-bottom: 2px solid #e8b0b0;
-    color: var(--gray-text);
-  }
-  .debate-v-respuesta {
-    background: #f0fff5;
-    padding: 0.8rem 1.2rem;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--gray-text);
-  }
-  .debate-v-tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 3px;
-    margin-right: 8px;
-    vertical-align: middle;
-  }
-  .debate-v-tag.gobierno { background: #8b2e2e; color: white; }
-  .debate-v-tag.respuesta { background: #1e5c3a; color: white; }
-
-  /* ── MAIN ── */
-  #main {
-    margin-left: var(--sidebar-w);
-    min-height: 100vh;
-  }
-
-  /* ── COVER ── */
-  #cover {
+  /* HERO */
+  .hero {
     background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, #1a4a7a 100%);
-    padding: 80px 80px 70px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  #cover::before {
-    content: '';
-    position: absolute;
-    top: -100px; right: -100px;
-    width: 500px; height: 500px;
-    border: 1px solid rgba(200,168,75,0.15);
-    border-radius: 50%;
-  }
-
-  #cover::after {
-    content: '';
-    position: absolute;
-    bottom: -80px; right: 60px;
-    width: 300px; height: 300px;
-    border: 1px solid rgba(200,168,75,0.1);
-    border-radius: 50%;
-  }
-
-  .cover-eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 24px;
-  }
-
-  .cover-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 46px;
-    font-weight: 900;
-    color: white;
-    line-height: 1.15;
-    max-width: 700px;
-    margin-bottom: 20px;
-  }
-
-  .cover-subtitle {
-    font-family: 'Source Serif 4', serif;
-    font-size: 20px;
-    color: rgba(255,255,255,0.7);
-    font-style: italic;
-    max-width: 600px;
-    margin-bottom: 36px;
-    line-height: 1.6;
-  }
-
-  .cover-divider {
-    width: 80px;
-    height: 3px;
-    background: var(--gold);
-    margin-bottom: 28px;
-  }
-
-  .cover-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 1px;
-  }
-
-  /* ── CONTENT ── */
-  #content {
-    max-width: 820px;
-    padding: 60px 80px 100px;
-  }
-
-  /* ── SECTIONS ── */
-  .section {
-    margin-bottom: 64px;
-    padding-top: 16px;
-  }
-
-  .section-number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-
-  h1.section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 30px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 28px;
-    padding-bottom: 16px;
-    border-bottom: 2px solid var(--gray-light);
-    line-height: 1.3;
-  }
-
-  h2.subsection-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--navy-mid);
-    margin: 36px 0 14px;
-    line-height: 1.4;
-  }
-
-  h3.sub-subsection {
-    font-family: 'Source Serif 4', serif;
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--blue);
-    margin: 28px 0 10px;
-    letter-spacing: 0.3px;
-  }
-
-  p {
-    margin-bottom: 18px;
-    text-align: justify;
-    hyphens: auto;
-    font-size: 20px;
-    color: var(--gray-text);
-  }
-
-  p.destacado {
-    background: linear-gradient(to right, rgba(29,95,168,0.06), transparent);
-    border-left: 4px solid var(--blue-light);
-    padding: 16px 20px;
-    margin: 24px 0;
-    font-style: italic;
-    font-weight: 600;
-    color: var(--navy-mid);
-    border-radius: 0 6px 6px 0;
-    text-align: left;
-  }
-
-  ul.bullets {
-    margin: 10px 0 20px 0;
-    padding-left: 0;
-    list-style: none;
-  }
-
-  ul.bullets li {
-    padding: 8px 0 8px 28px;
-    position: relative;
-    font-size: 17px;
-    border-bottom: 1px solid var(--gray-light);
-    color: var(--gray-text);
-  }
-
-  ul.bullets li:last-child { border-bottom: none; }
-
-  ul.bullets li::before {
-    content: '▸';
-    position: absolute;
-    left: 4px;
-    color: var(--gold);
-    font-size: 17px;
-    top: 10px;
-  }
-
-  ul.bullets li strong {
-    color: var(--navy);
-    display: block;
-    font-size: 20px;
-    margin-bottom: 2px;
-  }
-
-  /* ── CALL OUT BOXES ── */
-  .box-warning {
-    background: #fff8f0;
-    border: 1px solid #e8c080;
-    border-left: 5px solid var(--gold);
-    border-radius: 6px;
-    padding: 18px 22px;
-    margin: 24px 0;
-  }
-
-  .box-warning .box-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-
-  .box-danger {
-    background: #fff5f5;
-    border: 1px solid #e8a0a0;
-    border-left: 5px solid var(--red-soft);
-    border-radius: 6px;
-    padding: 18px 22px;
-    margin: 24px 0;
-  }
-
-  .box-danger .box-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--red-soft);
-    margin-bottom: 6px;
-  }
-
-  .box-key {
-    background: #f0f6ff;
-    border: 1px solid #a0c0e8;
-    border-left: 5px solid var(--blue);
-    border-radius: 6px;
-    padding: 18px 22px;
-    margin: 24px 0;
-  }
-
-  .box-key .box-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--blue);
-    margin-bottom: 6px;
-  }
-
-  /* ── TWO COLUMN COMPARISON ── */
-  .comparison {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin: 24px 0;
-  }
-
-  .col-good, .col-bad {
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .col-good .col-head { background: var(--green-soft); color: white; padding: 10px 16px; font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; }
-  .col-bad .col-head { background: var(--red-soft); color: white; padding: 10px 16px; font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; }
-
-  .col-good .col-body { background: #f0fff5; border: 1px solid #b0ddc0; border-top: none; }
-  .col-bad .col-body { background: #fff5f5; border: 1px solid #e0b0b0; border-top: none; }
-
-  .col-body li { padding: 9px 14px; font-size: 17px; border-bottom: 1px solid rgba(0,0,0,0.06); list-style: none; }
-  .col-body li:last-child { border-bottom: none; }
-  .col-body li strong { display: block; font-size: 17px; color: var(--navy); margin-bottom: 1px; }
-
-  /* ── PHASES ── */
-  .phases {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin: 24px 0;
-  }
-
-  .phase {
-    background: white;
-    border: 1px solid var(--gray-light);
-    border-radius: 8px;
-    padding: 16px;
+    padding: 70px 60px 60px;
     text-align: center;
-    position: relative;
   }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; font-weight: 600; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 46px); font-weight: 900; color: white; line-height: 1.15; margin-bottom: 0.8rem; }
+  .hero-tagline { font-size: 17px; color: var(--gold-light); font-style: italic; margin-bottom: 1.2rem; }
+  .hero-desc { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; max-width: 580px; margin: 0 auto 2.5rem; }
 
-  .phase-num {
-    width: 32px; height: 32px;
-    background: var(--navy);
-    color: white;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 auto 10px;
+
+  /* NAV DOCS */
+  .doc-nav { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08); padding: 16px 60px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .doc-btn { padding: 8px 20px; border-radius: 4px; font-size: 13px; font-family: 'Source Serif 4', serif; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+  .doc-btn.active { background: var(--gold); color: var(--navy); }
+  .doc-btn.outline { border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.8); }
+  .doc-btn.outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* MAIN */
+  .main { max-width: 780px; margin: 0 auto; padding: 48px 40px 80px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-mid); padding: 2rem 0 0.8rem; border-top: 1px solid var(--border); margin-top: 1.5rem; }
+  .section-label:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+
+  /* ACCORDION */
+  .acc-item { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; background: white; overflow: hidden; }
+  .acc-trigger { width: 100%; padding: 14px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; background: none; border: none; text-align: left; font-family: 'Source Serif 4', serif; transition: background 0.15s; }
+  .acc-trigger:hover { background: var(--warm-white); }
+  .acc-num { font-size: 11px; color: var(--gold); font-weight: 700; letter-spacing: 0.06em; min-width: 24px; font-family: 'Playfair Display', serif; }
+  .acc-title { font-size: 15px; font-weight: 600; color: var(--navy); flex: 1; line-height: 1.3; }
+  .acc-arrow { color: var(--gray-mid); transition: transform 0.2s; font-size: 11px; }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 0 18px 16px; border-top: 1px solid var(--border); }
+  .acc-item.open .acc-body { display: block; }
+  .acc-text { font-size: 14px; color: var(--gray-mid); line-height: 1.7; padding-top: 14px; }
+  .acc-readmore { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--blue); text-decoration: none; }
+  .acc-readmore:hover { text-decoration: underline; }
+  .acc-readmore::after { content: ' →'; }
+
+  /* FOOTER */
+  .footer { background: var(--navy); padding: 2rem 60px; text-align: center; }
+  .footer-tagline { color: var(--gold); font-style: italic; font-size: 15px; margin-bottom: 0.4rem; }
+  .footer-meta { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+  @media (max-width: 640px) {
+    .hero { padding: 48px 24px 40px; }
+    .doc-nav { padding: 12px 20px; }
+    .main { padding: 32px 20px 60px; }
+    .stat { padding: 0 1rem; }
+    .stat-num { font-size: 24px; }
   }
-
-  .phase-title {
-    font-family: 'Source Serif 4', serif;
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 4px;
-  }
-
-  .phase-sub {
-    font-size: 17px;
-    color: var(--gray-mid);
-  }
-
-  /* ── BIBLIOGRAPHY ── */
-  .bib-group {
-    margin-bottom: 28px;
-  }
-
-  .bib-group-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--gold);
-    border-bottom: 1px solid var(--gray-light);
-    padding-bottom: 6px;
-    margin-bottom: 12px;
-  }
-
-  .bib-item {
-    padding: 8px 0 8px 20px;
-    border-bottom: 1px solid var(--gray-light);
-    font-size: 17px;
-    color: var(--gray-text);
-    position: relative;
-  }
-
-  .bib-item:last-child { border-bottom: none; }
-
-  .bib-item::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--gray-mid);
-    font-size: 17px;
-  }
-
-  .bib-item a {
-    color: var(--blue);
-    text-decoration: none;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    display: block;
-    margin-top: 3px;
-    word-break: break-all;
-    opacity: 0.8;
-  }
-
-  .bib-item a:hover { opacity: 1; text-decoration: underline; }
-
-  /* ── DIVIDER ── */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--gray-light);
-    margin: 48px 0;
-  }
-
-  .divider-gold {
-    border: none;
-    border-top: 2px solid var(--gold);
-    width: 60px;
-    margin: 32px 0;
-  }
-
-  /* ── FOOTER ── */
-  #footer {
-    background: var(--navy);
-    color: rgba(255,255,255,0.4);
-    padding: 28px 80px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 1px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  /* ── MOBILE TOGGLE ── */
-  #menu-toggle {
-    display: none;
-    position: fixed;
-    top: 16px; left: 16px;
-    z-index: 200;
-    background: var(--navy);
-    border: none;
-    color: white;
-    padding: 10px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 20px;
-  }
-
-  @media (max-width: 900px) {
-    :root { --sidebar-w: 0px; }
-    #sidebar { transform: translateX(-280px); width: 280px; }
-    #sidebar.open { transform: translateX(0); }
-    #main { margin-left: 0; }
-    #menu-toggle { display: block; }
-    #cover { padding: 60px 32px 50px; }
-    .cover-title { font-size: 30px; }
-    #content { padding: 40px 32px 80px; }
-    #footer { padding: 20px 32px; flex-direction: column; gap: 8px; text-align: center; }
-    .comparison { grid-template-columns: 1fr; }
-    .phases { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  /* ── NAV DOC LINKS ── */
-  .nav-doc-link {
-    display: block;
-    padding: 9px 16px;
-    margin: 4px 12px 0 12px;
-    color: var(--navy) !important;
-    background: var(--gold);
-    text-decoration: none;
-    font-size: 14px;
-    font-family: 'Source Serif 4', serif;
-    border-radius: 3px;
-    font-weight: 600;
-    transition: all 0.2s;
-    line-height: 1.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .nav-doc-link:hover { background: var(--gold-light); }
-
 </style>
 </head>
 <body>
 
-<button id="menu-toggle" onclick="toggleMenu()">☰</button>
+<div class="hero">
+  <div class="hero-eyebrow">Borrador institucional · Rosario, Santa Fe · 2026</div>
+  <h1 class="hero-title">El corretaje inmobiliario:<br>diagnóstico y ordenamiento del sistema</h1>
+  <p class="hero-tagline">Inclusión con legalidad</p>
+  <p class="hero-desc">Una iniciativa para sincerar y ordenar el sector inmobiliario. No es una propuesta teórica: es un sistema concreto, con reglamento, hoja de ruta y respaldo jurídico, pensado para funcionar ahora.</p>
 
-<!-- SIDEBAR -->
-<nav id="sidebar">
-  <div class="sidebar-header">
-    <div class="logo">Corretaje 2026</div>
-    <div class="doc-title">Modernización del Corretaje Inmobiliario en Argentina</div>
+</div>
+
+<div class="doc-nav">
+  <a class="doc-btn active" href="#">Índice</a>
+  <a class="doc-btn outline" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html">Documento principal</a>
+  <a class="doc-btn outline" href="reglamento.html">Reglamento</a>
+  <a class="doc-btn outline" href="reformas.html">Mapa de reformas</a>
+</div>
+
+<div class="main">
+
+  <div class="section-label">El problema</div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">1</span>
+      <span class="acc-title">Introducción — por qué importa esta transacción</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">La compra o el alquiler de una vivienda son decisiones trascendentales en la vida de las personas. Cargan emoción, historia y expectativa. La existencia del Corredor Inmobiliario Matriculado no se justifica por tradición ni por corporativismo: se justifica por tres razones concretas — protege al ciudadano en una transacción que ocurre pocas veces en la vida y donde los errores son irreversibles, reduce la incertidumbre al concentrar conocimiento y negociación en un profesional especializado, y genera confianza verificable en un sector donde la información ya es pública pero la responsabilidad no lo es.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s1">Leer la introducción completa</a>
+    </div>
   </div>
 
-  <div class="nav-section">Documento</div>
-  <a class="nav-item" href="#cover">Portada</a>
-  <a class="nav-item" href="#s1">1. Introducción</a>
-
-  <div class="nav-section">Diagnóstico</div>
-  <a class="nav-item" href="#s2">2. Un sector bajo presión: diagnóstico de amenazas</a>
-  <a class="nav-item sub" href="#s2-1">2.1 Franquicias y agentes informales</a>
-  <a class="nav-item sub" href="#s2-2">2.2 El fracaso judicial</a>
-  <a class="nav-item sub" href="#s2-3">2.3 La desregulación estatal</a>
-  <a class="nav-item sub" href="#s2-4">2.4 La amenaza CNV</a>
-
-  <div class="nav-section">Contexto</div>
-  <a class="nav-item" href="#s3">3. Contexto internacional</a>
-  <a class="nav-item sub" href="#s3-1">3.1 Estados Unidos</a>
-  <a class="nav-item sub" href="#s3-2">3.2 España</a>
-  <a class="nav-item sub" href="#s3-3">3.3 Italia y Portugal</a>
-  <a class="nav-item sub" href="#s3-4">3.4 Ecuador</a>
-  <a class="nav-item" href="#s4">4. Antecedentes normativos</a>
-  <a class="nav-item sub" href="#s4-1">4.1 Ley 9445 Córdoba</a>
-  <a class="nav-item sub" href="#s4-2">4.2 Arquitectos Rosario</a>
-  <a class="nav-item sub" href="#s4-3">4.3 Ley 13.154 Santa Fe</a>
-
-  <div class="nav-section">El Sistema</div>
-  <a class="nav-item" href="#s5">5. Adscripto Inmobiliario</a>
-  <a class="nav-item sub" href="#s5-1">5.1 Filosofía</a>
-  <a class="nav-item sub" href="#s5-2">5.2 El sistema</a>
-  <a class="nav-item sub" href="#s5-3">5.3 Actos de corretaje</a>
-  <a class="nav-item sub" href="#s5-4">5.4 Escalera profesional</a>
-  <a class="nav-item sub" href="#s5-5">5.5 Efecto sobre redes inmobiliarias</a>
-
-  <div class="nav-section">Argumentos</div>
-  <a class="nav-item" href="#s6">6. Argumentos estratégicos</a>
-  <a class="nav-item sub" href="#s6-1">6.1 "Darles entidad"</a>
-  <a class="nav-item sub" href="#s6-2">6.2 Costo de no actuar</a>
-  <a class="nav-item sub" href="#s6-3">6.3 Negociación legislativa</a>
-  <a class="nav-item sub" href="#s6-4">6.4 Dimensión laboral</a>
-  <a class="nav-item sub" href="#s6-5">6.5 Honorarios y comisión</a>
-  <a class="nav-item sub" href="#s6-6">6.6 Ordenar redes inmobiliarias</a>
-  <a class="nav-item sub" href="#s6-7">6.7 Nivelar el campo</a>
-  <a class="nav-item sub" href="#s6-8">6.8 Soberanía, uberización y lo humano</a>
-  <a class="nav-item sub" href="#s6-9">6.9 Argumento definitivo</a>
-  <a class="nav-item sub" href="#s6-10">6.10 Escala provincial</a>
-
-  <div class="nav-section">Implementación</div>
-  <a class="nav-item" href="#s7">7. Estrategia de implementación</a>
-  <a class="nav-item sub" href="#s7-1">7.1 Validación interna</a>
-  <a class="nav-item sub" href="#s7-2">7.2 Respaldo UNR</a>
-  <a class="nav-item sub" href="#s7-3">7.3 Expansión nacional</a>
-  <a class="nav-item sub" href="#s7-4">7.4 Reforma legislativa</a>
-  <a class="nav-item sub" href="#s7-5">7.5 Poder de policía</a>
-  <a class="nav-item sub" href="#s7-6">7.6 Convenio escribanos</a>
-  <a class="nav-item" href="#s8">8. Trazabilidad y GAFI</a>
-  <a class="nav-item" href="#s9">9. Marco institucional</a>
-  <div class="nav-section">Cierre</div>
-  <a class="nav-item" href="#s10">10. Comparación de alternativas</a>
-  <a class="nav-item sub" href="#s10-1">10.1 Desregulación total</a>
-  <a class="nav-item sub" href="#s10-2">10.2 Registro estatal</a>
-  <a class="nav-item sub" href="#s10-3">10.3 Statu quo</a>
-  <a class="nav-item sub" href="#s10-4">10.4 Esta propuesta</a>
-  <a class="nav-item" href="#s11">11. Conclusión</a>
-  <div class="nav-section">Sistema</div>
-  <a class="nav-item sub" href="#s12-1">12.1 Identificación y registro</a>
-  <a class="nav-item sub" href="#s12-2">12.2 Límite por Corredor Responsable</a>
-  <a class="nav-item sub" href="#s12-3">12.3 Costo y distribución</a>
-  <a class="nav-item sub" href="#s12-4">12.4 Vínculo Corredor-Adscripto</a>
-  <a class="nav-item sub" href="#s12-5">12.5 Formación obligatoria</a>
-  <a class="nav-item sub" href="#s12-6">12.6 Período de transición</a>
-  <a class="nav-item sub" href="#s12-7">12.7 Infracciones</a>
-  <a class="nav-item sub" href="#s12-8">12.8 Baja y suspensión</a>
-  <a class="nav-item sub" href="#s12-9">12.9 Sistema de formación</a>
-  <a class="nav-item sub" href="#s12-10">12.10 Horizonte académico</a>
-  <a class="nav-item" href="#s12">12. Esquema de funcionamiento</a>
-  <a class="nav-item" href="#biblio">Referencias</a>
-
-  <div class="nav-section" style="margin-top:1.5rem;">Documentos</div>
-  <a class="nav-doc-link" href="reglamento.html">→ Reglamento</a>
-  <a class="nav-doc-link" href="reformas.html">→ Mapa de reformas</a>
-
-</nav>
-
-<!-- MAIN -->
-<div id="main">
-
-  <!-- COVER -->
-  <div id="cover">
-    <div class="cover-eyebrow">Documento de trabajo · Argentina · 2026</div>
-    <div class="cover-title">El corretaje inmobiliario: diagnóstico y ordenamiento del sistema</div>
-    <div class="cover-subtitle">Diagnóstico y ordenamiento del sistema de intermediación inmobiliaria</div>
-    <div class="cover-divider"></div>
-    <div class="cover-meta">Versión preliminar · Uso institucional restringido · Rosario, Santa Fe — 2026</div>
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">2</span>
+      <span class="acc-title">Diagnóstico — un sector bajo presión</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">Una parte importante del sector opera informalmente. Las proptechs y franquicias capturan el territorio sin responsabilidad profesional. El gobierno nacional impulsa un anteproyecto que modificaría el Código Civil para exigir solo título secundario para ejercer el corretaje. Los corredores matriculados son sujetos obligados ante la UIF — la desregulación eliminaría esa figura y abriría la puerta al lavado de activos.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s2">Leer el diagnóstico completo</a>
+    </div>
   </div>
 
-  <!-- CONTENT -->
-  <div id="content">
-
-    <!-- 1. INTRODUCCIÓN -->
-    <div class="section" id="s1">
-      <div class="section-number">Sección 01</div>
-      <h1 class="section-title">Introducción</h1>
-      <p>La compra o el alquiler de una vivienda son decisiones trascendentales en la vida de las personas. Cargan emoción, historia y expectativa. Son importantes desde lo económico, pero van mucho más allá: es el lugar donde una familia va a vivir, donde van a crecer los hijos, donde se construye el hogar. Es el jubilado que juntó los ahorros de toda su vida para comprar su departamento. Es la familia joven que alquila su primer lugar. Es la persona que invierte lo que tiene en una propiedad para asegurar su futuro. Decisiones que merecen ser acompañadas por un profesional formado, a la altura de lo que está en juego.</p>
-
-      <p>La existencia del Corredor Inmobiliario Matriculado no se justifica por tradición ni por corporativismo. Se justifica por tres razones concretas: reduce los riesgos del ciudadano en una transacción que ocurre pocas veces en la vida y donde los errores son irreversibles; reduce los costos de transacción al concentrar información, negociación y coordinación en un profesional especializado; y genera confianza verificable en un mercado donde la información ya es pública pero la responsabilidad no lo es. En un mercado donde la información es cada vez más accesible gracias a la tecnología, el valor diferencial del profesional inmobiliario ya no es controlar la información, sino generar confianza, reducir riesgos y facilitar acuerdos eficientes.</p>
-
-      <p>Un mercado que define el destino patrimonial de las personas merece garantías mínimas no negociables: que quien asesore tenga formación verificada, que esté identificado y sea trazable, y que exista un camino de reclamo expeditivo si algo sale mal. Ese camino ya existe — el Colegio Profesional — no le cuesta nada al Estado, no requiere crear nueva burocracia, y solo necesita profundizar su evolución tecnológica y operativa. Desarmarlo no es eficiencia: es abandonar al ciudadano.</p>
-
-      <p>La Provincia de Santa Fe acaba de afirmar esto con rango constitucional. El Artículo 53 de la nueva Constitución Provincial, promulgada en septiembre de 2025, reconoce expresamente la existencia de los Colegios y Consejos Profesionales. No es una declaración simbólica: es el fundamento jurídico que le permite a Santa Fe ordenar su mercado inmobiliario de manera soberana, independientemente de lo que decida el gobierno nacional. La Nación puede desregular el comercio. La Provincia regula el ejercicio profesional de sus ciudadanos — y esa es una facultad no delegada.</p>
-
-      <p>Para eso existe el Corredor Inmobiliario Matriculado. No como un intermediario más, sino como un profesional con formación verificada, responsabilidad legal y algo concreto que perder si falla: su matrícula, su patrimonio, su carrera. Si algo sale mal, hay una vía de reclamo real —una cuenta que embargar, una persona a inhibir, una institución que sanciona—. Eso es lo que diferencia una operación con respaldo de una operación a la intemperie.</p>
-
-      <p>La historia de las profesiones fue un camino de avance de cada ciencia, ya sea médica, jurídica, exactas y otras. En cada caso, la sociedad eligió lo mejor preparado posible para lo que más importa. Lo mismo ocurrió con el corretaje inmobiliario: hubo un momento en que los legisladores reconocieron que intermediar en la compraventa de un inmueble no era un acto comercial ordinario, y dijeron: esto lo tiene que hacer un profesional. Esa decisión no fue un capítulo cerrado — fue el comienzo de un camino. Entre Ríos modificó su ley para exigir licenciatura de grado. Rosario creó la primera licenciatura pública del país en la carrera. La dirección natural es más especialización, desarrollo y calidad en el saber, no menos. Resultado de ello es el rol de las universidades, quienes brindan la formación necesaria y garantizada por un título universitario que avala el ejercicio de esta profesión. <strong>Desregular en 2026 no es modernizar: es ir a contramano de lo que la propia sociedad eligió.</strong></p>
-
-      <p>Una operación inmobiliaria presenta características especiales de falla de mercado: ocurre pocas veces en la vida de una persona, involucra montos que representan años de ahorro, contiene información oculta que el comprador o inquilino no puede evaluar fácilmente — títulos, valuaciones, riesgos documentales, condiciones del mercado — y los errores son muy costosos e irreversibles. Esa asimetría de información es exactamente el tipo de falla que justifica, desde la teoría económica, la existencia de un intermediario profesional regulado.</p>
-
-      <p>Sin embargo, la realidad del mercado inmobiliario argentino ha evolucionado en una dirección que los Colegios no pueden seguir ignorando. El presente documento analiza esa realidad en profundidad, incorpora evidencia nacional e internacional, y propone una respuesta proactiva que permita modernizar el sistema profesional sin resignar el objetivo central: la protección de la sociedad.</p>
-      <p>Todo lo que esta propuesta plantea — la adscripción, el poder de policía, el convenio con escribanos, la formación obligatoria, el sistema digital — existe por una sola razón: <strong>el ciudadano</strong>. Que sepa con quién está hablando cuando va a comprar, alquilar o vender una propiedad. Que pueda verificar en segundos si esa persona está habilitada y quién responde por ella. Que tenga a quién reclamarle si algo sale mal — alguien con nombre, con matrícula y con una institución detrás que puede sancionarlo en semanas, no en años. El ciudadano es el destinatario central de esta propuesta. No el Corredor Responsable, no el Adscripto Inmobiliario, no el Colegio. El ciudadano que toma la decisión más importante de su vida económica.</p>
-
-      <p class="destacado">Este documento es la síntesis de un proceso de análisis institucional que combina investigación jurisprudencial nacional, comparación de modelos internacionales y un modelo concreto de ordenamiento. Su destino es servir de base para el debate institucional interno, la validación empírica mediante encuesta, y la eventual presentación ante la Legislatura de la Provincia de Santa Fe y ante las instituciones representativas del sector a nivel nacional.</p>
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">3</span>
+      <span class="acc-title">Contexto internacional — cómo lo resolvieron otros</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">En EEUU existe un sistema estricto de dos niveles regulado por cada estado: salesperson license y broker license, ambos con formación obligatoria, examen estatal y renovación periódica. En España, Ecuador y otros países latinoamericanos también rigen sistemas de habilitación profesional. El gobierno cita EEUU como modelo — pero omite que ese modelo tiene más regulación, no menos.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s3">Leer el contexto internacional</a>
     </div>
-
-    <hr class="divider">
-
-    <!-- 2. DIAGNÓSTICO -->
-    <div class="section" id="s2">
-      <div class="section-number">Sección 02</div>
-      <h1 class="section-title">Un sector bajo presión: diagnóstico de amenazas</h1>
-
-      <h2 class="subsection-title" id="s2-1">2.1 La expansión del modelo de franquicias y agentes informales</h2>
-      <p>Las plataformas tecnológicas inmobiliarias — conocidas como proptechs — son empresas que utilizan la tecnología para intermediar en el mercado de compraventa y alquiler de propiedades, desplazando al profesional matriculado del proceso. Su modelo de negocio no es prestar un servicio local: es escalar globalmente, concentrar el acceso a la información y capturar el mercado. Lo que en otros sectores se llamó uberización — la sustitución del profesional por una plataforma que conecta oferta y demanda sin responsabilidad profesional — está llegando al mercado inmobiliario con fuerza. El resultado es la pérdida de soberanía del mercado local, la desaparición del vínculo persona a persona que caracteriza a las operaciones inmobiliarias, y la transferencia de datos sensibles de miles de ciudadanos a capitales que no tienen arraigo, no responden ante nadie y no dejan nada en el territorio.</p>
-      <p>Desde hace más de una década, una parte creciente del mercado inmobiliario opera a través de personas que no son Corredores Inmobiliarios Matriculados. Este fenómeno, inicialmente asociado a grandes franquicias multinacionales como RE/MAX, se ha expandido a inmobiliarias de todos los tamaños.</p>
-      <p>Las cifras son contundentes: RE/MAX Argentina y Uruguay cuenta con más de 200 franquicias en más de 70 localidades y más de 7.800 agentes. En 2024 asistió a más de 120.000 familias, estimando representar un 20% del mercado inmobiliario nacional. Según datos del sector, más de 15.000 personas trabajan directamente bajo este modelo, y otras 30.000 en actividades conexas.</p>
-      <p>El panorama global también está en plena transformación. El 27 de abril de 2026, The Real Brokerage anunció la adquisición de RE/MAX Holdings, formando el "Real REMAX Group": una plataforma de 180.000 agentes en más de 120 países, valuada en aproximadamente 880 millones de dólares. RE/MAX ya no es una franquicia tradicional: pasa a ser parte de un conglomerado tecnológico global. Esto refuerza el argumento de soberanía: las decisiones sobre el mercado inmobiliario argentino serán tomadas desde estructuras corporativas internacionales, sin ningún vínculo con la realidad local.</p>
-      <p>Estas personas llevan adelante en la práctica la labor del Corredor Matriculado sin matrícula, sin la formación requerida por ley y sin relación de dependencia con ningún responsable regulado. La ciudadanía, en muchos casos, desconoce esta situación. Como señala el artículo 35 de la Ley Nacional N° 20.266, las personas no matriculadas que ejercen el corretaje de manera ilegal no tienen derecho a percibir honorarios ni retribución alguna.</p>
-      <p class="destacado">La realidad es incontrastable: este modelo existe, se consolida y continuará expandiéndose. Pretender lo contrario es tapar el sol con las manos.</p>
-
-      <h2 class="subsection-title" id="s2-2">2.2 El fracaso de la vía judicial</h2>
-      <p>La lucha judicial de los Colegios ha sido extensa, costosa y con resultados contradictorios. En Buenos Aires, la Cámara Civil y Comercial N°13 de Mar del Plata declaró en abril 2025 ilegal la participación de agentes no matriculados bajo el modelo RE/MAX. Sin embargo, en Santa Fe la propia Corte Suprema provincial resolvió de manera contradictoria casos idénticos: en diciembre de 2019 anuló por mayoría las sanciones del Colegio a dos franquiciadas de RE/MAX Litoral (<em>Högner</em>, A. y S. T. 294, p. 363/383 y <em>Batlle Casas</em>, A. y S. T. 294, p. 343/362) por considerar que no se probaron actos de corretaje concretos; y en mayo de 2020 rechazó la queja del Colegio de Rosario por defectos procesales (<em>Astolfi</em>, A. y S. T. 297, p. 151/154).</p>
-      <div class="box-key">
-        <div class="box-label">El dato jurídico clave que surge de estos fallos</div>
-        <p style="margin:0">Los ministros disidentes en <em>Högner</em> afirmaron que el corretaje es <strong>"eminentemente personal e indelegable"</strong> y que los agentes autónomos no matriculados <strong>"no resultan jurídicamente imputables al corredor matriculado"</strong>. Esa afirmación describe con precisión el vacío legal que la adscripción viene a llenar: hoy, cuando un agente informal perjudica a un ciudadano, no hay nadie a quien imputarle responsabilidad. La adscripción crea ese vínculo de imputabilidad que hoy no existe.</p>
-      </div>
-      <div class="box-danger">
-        <div class="box-label">⚠ Conclusión crítica</div>
-        <p style="margin:0">No existe voluntad judicial uniforme de combatir este fenómeno. Más de un centenar de causas siguen en proceso en Buenos Aires con resultado incierto. Continuar exclusivamente por esta vía no protege a nadie.</p>
-      </div>
-
-                  <h2 class="subsection-title" id="s2-3">2.3 El proyecto de desregulación</h2>
-
-      <p>El gobierno nacional ha mostrado su intención de avanzar con la desregulación del corretaje inmobiliario. Hubo un primer intento en 2025 — el proyecto "Ley de Libertad Inmobiliaria" del diputado Bongiovanni — que mostró las cartas pero no prosperó. Hoy un nuevo anteproyecto va más lejos: modifica directamente el Código Civil y Comercial para establecer que para ejercer el corretaje <strong>solo se requiere ser mayor de edad y tener título secundario</strong>. El artículo clave usa la palabra "sólo" — una cláusula de preempción que pretende que ninguna ley provincial pueda agregar requisitos. El propio anteproyecto crea inhabilidades (fallidos, inhibidos, condenados) pero no crea ningún registro ni autoridad que las verifique: hoy eso lo hace el Colegio al matricular. Sin matrícula, las inhabilidades son declarativas — se verifican cuando la estafa ya ocurrió. Además, el Título X del anteproyecto delega en el Ejecutivo la facultad de eliminar por decreto todo lo que considere "barrera de entrada", incluyendo matrículas y habilitaciones profesionales. Lo que no lograron escribir en el texto lo dejaron como delegación abierta.</p>
-
-      <p>Los argumentos que impulsan la desregulación son conocidos. Cada uno tiene respuesta.</p>
-
-      <div class="debate-v">
-        <div class="debate-v-gobierno">
-          <span class="debate-v-tag gobierno">El gobierno dice</span>
-          El título universitario y la matrícula encarecen el acceso a la profesión y generan barreras artificiales que perjudican al consumidor.
-        </div>
-        <div class="debate-v-respuesta">
-          <span class="debate-v-tag respuesta">La realidad</span>
-          El título no encarece nada para el ciudadano — solo garantiza que quien lo asesora sabe lo que hace. Cuando el Estado dice que no hace falta formarse para ejercer una profesión, le dice a toda la sociedad que estudiar no tiene recompensa. La dirección natural de todas las profesiones es más especialización, no menos. Entre Ríos ya exige licenciatura de grado. Rosario creó la primera licenciatura pública del país en corretaje inmobiliario — en la Universidad Nacional de Rosario. <strong>Desregular en 2026 no es modernizar: es ir a contramano de lo que la propia sociedad eligió.</strong>
-        </div>
-      </div>
-
-      <div class="debate-v">
-        <div class="debate-v-gobierno">
-          <span class="debate-v-tag gobierno">El gobierno dice</span>
-          La restricción geográfica limita la competencia y el libre ejercicio profesional en todo el país.
-        </div>
-        <div class="debate-v-respuesta">
-          <span class="debate-v-tag respuesta">La realidad</span>
-          Un profesional de Rosario no puede cubrir Mendoza de manera económicamente viable. La única entidad que puede cubrir todo el territorio nacional es una franquicia con estructura centralizada y escala masiva. Esta medida no democratiza el sector — lo concentra en los operadores más grandes, dejando al ciudadano con menos asesoramiento local y a los profesionales independientes sin trabajo.
-        </div>
-      </div>
-
-      <div class="debate-v">
-        <div class="debate-v-gobierno">
-          <span class="debate-v-tag gobierno">El gobierno dice</span>
-          Los Colegios aplican sanciones discrecionales sin control judicial, lo que viola el derecho a trabajar libremente.
-        </div>
-        <div class="debate-v-respuesta">
-          <span class="debate-v-tag respuesta">La realidad</span>
-          Este argumento ya fue rechazado por la Cámara Nacional de Apelaciones, que resolvió que las sanciones sobre matriculados son competencia exclusiva del Colegio profesional. El sancionado siempre puede apelar ante la Justicia Provincial. El antecedente es claro: el Decreto 2284/91 de Cavallo intentó lo mismo y fracasó — la regulación del ejercicio profesional es competencia exclusiva de las provincias desde 1853. El gobierno actual repite un movimiento que ya perdió.
-        </div>
-      </div>
-
-      <div class="debate-v">
-        <div class="debate-v-gobierno">
-          <span class="debate-v-tag gobierno">El gobierno dice</span>
-          La tecnología hace innecesaria la intermediación profesional regulada. Las plataformas digitales son más eficientes y accesibles.
-        </div>
-        <div class="debate-v-respuesta">
-          <span class="debate-v-tag respuesta">La realidad</span>
-          Las plataformas tecnológicas inmobiliarias — proptechs — no son un servicio neutral: son empresas que escalan globalmente, concentran el acceso a la información y capturan el sector. Lo que en otros rubros se llamó uberización está llegando al corretaje. El resultado es la pérdida de soberanía del sector local, la desaparición del vínculo persona a persona, y la transferencia de datos sensibles de miles de ciudadanos a capitales que no tienen arraigo, no responden ante nadie y no dejan nada en el territorio. No es casualidad que el principal impulsor privado de la desregulación sea el fundador de una startup proptech con acceso directo al gobierno. <strong>Las proptechs son las grandes ganadoras si caen los Colegios.</strong>
-        </div>
-      </div>
-
-      <div class="box-danger">
-        <div class="box-label">El argumento que el gobierno no menciona — UIF y GAFI</div>
-        <p>Los corredores inmobiliarios matriculados son <strong>sujetos obligados ante la UIF</strong> desde 2012, obligación reforzada por la Resolución UIF 43/2024 en concordancia con los estándares del GAFI. La desregulación no solo elimina esa obligación — <strong>elimina la figura del sujeto obligado</strong>. Si cualquier persona puede intermediar sin matrícula, ¿sobre quién ejerce la UIF su poder de policía? ¿Quién reporta las operaciones sospechosas? La respuesta es nadie. El sector inmobiliario — uno de los principales vectores de lavado de activos en el mundo — quedaría sin sujeto obligado identificable. Este punto se desarrolla en la <strong>Sección 8</strong>.</p>
-      </div>
-
-      <div class="box-key">
-        <div class="box-label">El blindaje constitucional — Art. 53 de la nueva Constitución de Santa Fe</div>
-        <p>La nueva Constitución Provincial, promulgada en septiembre de 2025, reconoce expresamente la existencia de los Colegios y Consejos Profesionales en su Artículo 53. La Nación puede desregular el comercio. La Provincia regula el ejercicio profesional de sus ciudadanos — y esa es una facultad no delegada desde 1853.</p>
-      </div>
-
-<h2 class="subsection-title" id="s2-4">2.4 La amenaza adicional: el antecedente CNV</h2>
-      <p>Existe una amenaza concreta que raramente se menciona: el gobierno nacional ya tiene un mecanismo probado para habilitar a personas a ejercer actividades de asesoramiento financiero sin título universitario: el Registro de Idóneos de la CNV. La adscripción colegial es exactamente lo contrario: no baja la vara de la formación universitaria — la absorbe la informalidad del mercado para obligarla a estudiar bajo los convenios con la UNR y la UNL. El Colegio no matricula idóneos: crea un tránsito formativo obligatorio hacia la profesión plena.</p>
-      <p>Cualquier persona mayor de 18 años con título secundario puede rendir un examen de idoneidad ante la CNV, sin obligación de cursar previamente. Aprobado el examen, se inscribe en el Registro Público de Idóneos y queda habilitada para asesorar al público inversor bajo supervisión de un agente autorizado. La CNV tiene poder de sanción directo, sin proceso judicial.</p>
-      <div class="box-danger">
-        <div class="box-label">⚠ Escenario de dos pasos</div>
-        <p style="margin:0">Primero el proyecto Bongiovanni elimina la obligatoriedad de matrícula para el corredor. Después, un decreto crea un registro nacional de idoneidad inmobiliaria administrado por el Estado. Si ambos pasos avanzan, el Colegio queda completamente afuera del sistema. Esta propuesta debe llegar antes.</p>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- 3. CONTEXTO INTERNACIONAL -->
-    <div class="section" id="s3">
-      <div class="section-number">Sección 03</div>
-      <h1 class="section-title">El contexto internacional</h1>
-
-      <h2 class="subsection-title" id="s3-1">3.1 Estados Unidos: el modelo que el gobierno cita — pero no describe bien</h2>
-      <p>En EEUU existe un sistema estricto de dos niveles regulado por cada estado. El primer nivel es el <em>salesperson license</em>, que requiere formación obligatoria y examen estatal. El segundo nivel es el <em>broker license</em>, que exige 2 a 5 años de experiencia previa y un nuevo examen. Ningún agente puede actuar sin un broker licenciado que responda por sus acciones.</p>
-      <p class="destacado">EEUU no desreguló: profesionalizó con niveles diferenciados, manteniendo control y responsabilidad. Es exactamente el sistema que esta propuesta plantea.</p>
-
-      <h2 class="subsection-title" id="s3-2">3.2 España: el contraejemplo que nadie muestra</h2>
-      <p>España tiene escasa regulación nacional y el resultado está documentado: la profesión sufre grave intrusismo. Solo Cataluña, Comunidad Valenciana e Islas Baleares exigen registro obligatorio, y precisamente esas son las regiones con mayor transparencia y protección al consumidor. España no es el modelo a seguir: es la advertencia.</p>
-
-      <h2 class="subsection-title" id="s3-3">3.3 Italia y Portugal: regulación con examen y seguro obligatorio</h2>
-      <p>En Italia se requiere licencia, inscripción en registro de la Cámara de Comercio y póliza de responsabilidad civil obligatoria. En Portugal es necesaria una licencia del IMPIC con requisitos de antecedentes penales y habilitación formal. Ambos países muestran que la regulación con formación y registro es la norma en los mercados desarrollados.</p>
-
-      <h2 class="subsection-title" id="s3-4">3.4 Ecuador: la advertencia del modelo sin Colegio fuerte</h2>
-      <p>Ecuador sancionó su Ley de Corredores de Bienes Raíces en 1984, siendo una de las legislaciones más antiguas de América Latina. Su sistema contempla dos figuras: el corredor profesional con licencia, caución y registro; y el Adscripto Inmobiliario que trabaja bajo la responsabilidad de un corredor habilitado.</p>
-      <p>En teoría, es exactamente el sistema de dos niveles que esta propuesta plantea. En la práctica, el Ministerio de Educación nunca cumplió su obligación de incorporar el corretaje como carrera intermedia. La formación quedó en manos de asociaciones voluntarias sin poder de policía efectivo. El resultado: altos niveles de informalidad y una brecha enorme entre la ley escrita y la práctica cotidiana.</p>
-      <div class="box-key">
-        <div class="box-label">Lección del caso Ecuador</div>
-        <p style="margin:0">El sistema de dos niveles solo funciona cuando existe una institución colegial fuerte, con poder de policía real. La diferencia con esta propuesta es exactamente esa: aquí el Colegio emite la adscripción, controla a sus titulares y sanciona a quienes operen fuera del esquema.</p>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- 4. ANTECEDENTES NORMATIVOS -->
-    <div class="section" id="s4">
-      <div class="section-number">Sección 04</div>
-      <h1 class="section-title">Antecedentes normativos en Argentina</h1>
-
-      <h2 class="subsection-title" id="s4-1">4.1 La Ley 9445 de Córdoba y la figura del adscripto</h2>
-      <p>La Ley Provincial N° 9445 de Córdoba contempla en su Artículo 22 la figura del Corredor Público Inmobiliario adscripto: corredores matriculados que trabajan vinculados a una sociedad, con responsabilidad explícita registrada. La lógica de vínculos formalizados entre corredores y estructuras societarias ya existe en el derecho provincial.</p>
-
-      <h2 class="subsection-title" id="s4-2">4.2 El Colegio de Arquitectos de Rosario: la matrícula dependiente</h2>
-      <p>El Colegio de Arquitectura y Urbanismo del Distrito 2 (Rosario) tiene una categoría de Profesional Dependiente que autoriza el ejercicio en relación de dependencia sin habilitar el ejercicio independiente. Es una matrícula de segundo nivel dentro del mismo colegio: antecedente directo y local del concepto que esta propuesta plantea.</p>
-
-      <h2 class="subsection-title" id="s4-3">4.3 La Ley 13.154 de Santa Fe y el reconocimiento constitucional</h2>
-      <p>La Ley Provincial N° 13.154 de Santa Fe regula el corretaje y establece al Colegio como autoridad de matriculación y control. Su estructura normativa ofrece el marco adecuado para incorporar la figura del Adscripto Inmobiliario mediante una modificación o reglamentación específica, apoyándose en una ley vigente y en un Colegio con capacidad institucional probada.</p>
-      <p>A esto se suma un hito histórico de enorme relevancia. La nueva Constitución de la Provincia de Santa Fe, promulgada en septiembre de 2025, incorporó por primera vez el reconocimiento explícito de los Colegios y Consejos Profesionales en su <strong>Artículo 53</strong>. El Colegio de Corredores Inmobiliarios de Rosario participó activamente en la Convención Reformadora para lograr ese reconocimiento. El resultado es un respaldo constitucional que fortalece la seguridad jurídica de los Colegios y los protege frente a cualquier intento de desregulación — exactamente el "resguardo ante posibles ataques de la legislación" que los propios Colegios describieron al celebrar la aprobación.</p>
-    </div>
-
-    <hr class="divider">
-
-    <!-- 5. LA PROPUESTA -->
-    <div class="section" id="s5">
-      <div class="section-number">Sección 05</div>
-      <h1 class="section-title">La alternativa: El Adscripto Inmobiliario</h1>
-
-      <h2 class="subsection-title" id="s5-1">5.1 Filosofía de la propuesta</h2>
-      <p>Esta propuesta no valida la ilegalidad: la transforma en legalidad regulada. Toma un hecho social consolidado y lo incorpora al sistema de control profesional. No es una derrota ni una concesión: es la evolución natural de una profesión que, hace quince años, tampoco tenía Colegio en Santa Fe.</p>
-      <p>Cuando se sancionó la Ley 13.154, nadie podía prever exactamente cómo iba a evolucionar el mercado. Las leyes trazan un rumbo, pero la realidad siempre les lleva el paso. La expansión de las franquicias, los miles de agentes que operan informalmente, la consolidación de un modelo no previsto en la norma — no fue un fracaso de la ley. Fue la realidad evolucionando más rápido que el marco legal. Así funciona el derecho: las normas se construyen sobre los usos y costumbres que la sociedad genera.</p>
-      <p class="destacado">La figura del Adscripto Inmobiliario no es una invención: es el reconocimiento formal de algo que ya existe. El rumbo cuando se crearon las leyes era desconocido — terminó siendo este. Esta propuesta le da nombre, forma y control institucional.</p>
-
-      <p>Esta propuesta no es una concesión al modelo de las franquicias ni una derrota frente a su expansión. El fenómeno de los agentes informales precede y trasciende a cualquier franquicia: existe en provincias sin franquicias, existía antes de que llegaran y seguiría existiendo si mañana desaparecieran. Es un fenómeno social y económico — personas que trabajan en intermediación inmobiliaria sin título porque el mercado de trabajo los llevó ahí. Las franquicias lo aprovecharon; no lo crearon. Regularizarlo no es rendirse ante ellas: es tomar el control institucional sobre una realidad que ninguna ley ni ningún fallo judicial logró revertir.</p>
-      <p class="destacado">Nuestro amor por la profesión tal como la conocimos originalmente no puede sesgarnos hasta hacernos olvidar nuestro objetivo principal: proteger a la sociedad frente a cualquier operación inmobiliaria.</p>
-
-      <h2 class="subsection-title" id="s5-2">5.2 Descripción del sistema</h2>
-      <ul class="bullets">
-        <li><strong>Adscripción colegial</strong>Emitida por el Colegio, no por la inmobiliaria ni el Corredor Responsable. El vínculo del Adscripto Inmobiliario es con la institución colegial, garantizando trazabilidad independientemente de sus movimientos laborales.</li>
-        <li><strong>Formación obligatoria</strong>Curso de corta duración con contenidos mínimos definidos por el Colegio, dictado por la Universidad Nacional de Rosario (UNR), con respaldo académico e institucional.</li>
-        <li><strong>Exclusividad</strong>El Adscripto Inmobiliario declara para qué Corredor Responsable trabaja. La relación es exclusiva: un Adscripto Inmobiliario trabaja para un único Corredor Responsable en todo momento.</li>
-        <li><strong>Responsabilidad del Corredor Responsable</strong>El Corredor Matriculado acepta formalmente la responsabilidad sobre el accionar del Adscripto Inmobiliario en todas las operaciones en que éste intervenga.</li>
-        <li><strong>Límite de cinco (5) Adscriptos Inmobiliarios por Corredor Responsable</strong>Una misma inmobiliaria puede contar con varios Corredores Matriculados, ampliando capacidad operativa proporcionalmente.</li>
-        <li><strong>El Adscripto Inmobiliario es un colaborador, no un profesional independiente</strong>El Adscripto Inmobiliario trabaja dentro de la estructura del corredor, bajo su responsabilidad y con su respaldo. Por eso el costo íntegro de la adscripción es a cargo del Corredor Matriculado. El Adscripto Inmobiliario no tiene obligación directa con el Colegio — ni disciplinaria en primer término, ni económica — porque no actúa en nombre propio sino en el marco que el corredor habilita y garantiza. Lo que el Corredor Responsable y el Adscripto Inmobiliario acuerden internamente sobre ese costo es privado. El efecto sistémico: el Corredor Responsable que quiera sumar Adscriptos Inmobiliarios paga por cada uno, incentivando selección y supervisión genuina.</li>
-        <li><strong>Renovación anual</strong>Con obligación de actualización formativa periódica.</li>
-        <li><strong>Control y sanción colegial</strong>El Colegio mantiene plenas facultades de control y sanción sobre los Adscriptos Inmobiliarios, igual que sobre los Corredores Matriculados.</li>
-      </ul>
-
-      <h2 class="subsection-title" id="s5-3">5.3 Actos de corretaje y límite de actuación del Adscripto Inmobiliario</h2>
-      <p>Una de las definiciones más importantes es establecer con precisión qué puede hacer un Adscripto Inmobiliario y qué es competencia exclusiva del Corredor Matriculado.</p>
-
-      <div class="comparison">
-        <div class="col-good">
-          <div class="col-head">✓ Adscripto puede realizar</div>
-          <ul class="col-body">
-            <li>Mostrar propiedades</li>
-            <li>Primer contacto con el interesado</li>
-            <li>Relevar información del inmueble</li>
-            <li>Acompañar visitas</li>
-            <li>Presentar ofertas al Corredor Responsable</li>
-            <li>Asistir en documentación (bajo supervisión)</li>
-          </ul>
-        </div>
-        <div class="col-bad">
-          <div class="col-head">✗ Exclusivo del Corredor Matriculado</div>
-          <ul class="col-body">
-            <li>Tasar y valuar inmuebles</li>
-            <li>Redactar contratos y boletos</li>
-            <li>Suscribir documentos</li>
-            <li>Estar presente en firmas</li>
-            <li>Asesorar jurídicamente</li>
-            <li>Percibir honorarios profesionales</li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="destacado">Sin el Corredor Matriculado, ninguna operación puede cerrarse legalmente. El Adscripto Inmobiliario trae el interesado; el Corredor Responsable cierra la operación. Esa dependencia es la garantía estructural de que el profesional responsable siempre interviene en el momento crítico.</p>
-
-      <h2 class="subsection-title" id="s5-4">5.4 La adscripción como escalera profesional</h2>
-      <p>El sistema no es un techo: es un piso. La formación para obtener la adscripción está diseñada para incentivar a los Adscriptos Inmobiliarios a continuar formándose hasta obtener la matrícula plena de Corredor Inmobiliario. La escalera también funciona en sentido inverso: el Corredor Responsable que voluntariamente da de baja su matrícula puede registrarse como Adscripto Inmobiliario transcurridos 365 días desde la baja efectiva. Durante ese período no puede ejercer ningún acto de intermediación. A mediano plazo: más matriculados activos, más capacidad real de fiscalización sostenida con recursos propios del sistema, sin ningún aporte del Estado. El sistema de adscripción se paga solo — los costos los asumen el Corredor Responsable y el Adscripto Inmobiliario — y le permite al Colegio sostener el control profesional de manera expeditiva, sin cargar al sistema judicial. Un mecanismo que protege al ciudadano, alivia a la Justicia y no le cuesta un peso al Estado: exactamente el modelo que cualquier gobierno debería querer.</p>
-      <p>Pero el beneficio no es solo institucional: es también personal y económico. El Adscripto Inmobiliario que por medio de la formación universitaria obtiene la matrícula plena puede ejercer de manera independiente, abrir su propia inmobiliaria y ampliar sustancialmente sus ingresos. Ya no depende del Corredor Responsable: puede ser el Corredor Responsable. La adscripción no es un techo: es el primer escalón de un camino que puede llevar a la autonomía profesional plena. El sistema es recíproco — le pide formación y responsabilidad al Adscripto Inmobiliario, y le ofrece a cambio un horizonte de crecimiento real. Ese mensaje tiene que llegar a quienes hoy dudan si vale la pena entrar.</p>
-
-      <h2 class="subsection-title" id="s5-5">5.5 Efecto sobre las estructuras de redes inmobiliarias</h2>
-      <p>Una estructura de red inmobiliaria que hoy opera con 200 agentes bajo un solo matriculado deberá contar con al menos 20 Corredores Responsables matriculados activos. El modelo de escala masiva sin responsabilidad real se vuelve inviable sin necesidad de prohibición explícita.</p>
-      <div class="box-key">
-        <div class="box-label">¿Y al Adscripto Inmobiliario qué le da? — el argumento que hay que comunicar</div>
-        <p style="margin:0">El Adscripto Inmobiliario deja de ser una figura anónima sin respaldo y pasa a tener <strong>identidad profesional verificable</strong>. Ante un conflicto, ya no está solo: tiene al Corredor Responsable que responde con él y al Colegio como instancia de resolución. Brinda un servicio más seguro, lo que lo hace más valioso ante los clientes. Tiene acceso a formación, red de contactos y legitimidad ante escribanos y organismos. Y tiene el camino abierto hacia la matrícula plena y la autonomía profesional. El sistema le pide responsabilidad. A cambio, le da reconocimiento, respaldo y futuro.</p>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- 6. ARGUMENTOS -->
-    <div class="section" id="s6">
-      <div class="section-number">Sección 06</div>
-      <h1 class="section-title">Argumentos estratégicos</h1>
-
-      <h2 class="subsection-title" id="s6-1">6.1 Respuesta al argumento interno: "reconocerlos les da entidad"</h2>
-      <p>Esta objeción parte de una premisa falsa: que hoy los agentes no tienen entidad. La tienen. Son más de 15.000 personas organizadas dentro de las estructuras de las franquicias que ejercen presión sobre el mercado todos los días. No identificarlos no los hace invisibles: los hace incontrolables.</p>
-      <p class="destacado">El argumento de "identificación sin formación para no darles entidad" es el más peligroso de todos porque parece una solución intermedia pero no lo es. Sin formación no hay argumento frente al legislador, no se protege al ciudadano. La formación no le da poder al Adscripto Inmobiliario: le da obligaciones.</p>
-
-      <div class="box-key">
-        <div class="box-label">El Colegio no es de paso obligatorio</div>
-        <p style="margin:0">Nadie está obligado a contratar un corredor. Quien quiere vender directamente puede hacerlo. La matrícula no es un peaje: es un estándar de calidad disponible para quien lo elija. Lo que desaparece sin matrícula no es el costo — sino la garantía: formación verificada, responsabilidad legal y un organismo que sanciona si falla.</p>
-      </div>
-
-      <h2 class="subsection-title" id="s6-2">6.2 El costo de no hacer nada</h2>
-      <p>Hay una evidencia histórica que el debate actual sistemáticamente ignora. La situación del corretaje informal no es nueva ni es producto de este gobierno. Tres presidentes nacionales de signos políticos completamente distintos — Cristina Fernández, Mauricio Macri y Alberto Fernández — y cuatro gobernadores de Santa Fe — Antonio Bonfatti, Miguel Lifschitz, Omar Perotti y Maximiliano Pullaro — transcurrieron mientras el sistema de agentes informales crecía, se consolidaba y se expandía. Ninguno lo frenó. La vía judicial fue inconsistente. La voluntad política, inexistente. El gobierno actual, en cambio, eligió un camino diferente: en lugar de ordenar el mercado, propone abrirlo sin controles.</p>
-      <p>Pero hay una segunda lectura más incómoda y más honesta: todos esos gobiernos, de maneras distintas, fueron tolerando y habilitando el cambio. El modelo creció bajo todos ellos. La sociedad lo adoptó, el mercado lo incorporó y ningún poder del Estado lo revirtió. Eso no es una anomalía: es una señal. La realidad ya tomó esa decisión de facto.</p>
-      <p class="destacado">Lo que está en disputa no es si habrá agentes — los hay y los habrá. Lo que está en disputa es quién los controla. Si el Colegio no propone una solución propia ahora, alguien más lo hará — y ese alguien ya tiene nombre y proyecto — y ha demostrado que está dispuesto a avanzar.</p>
-
-      <p>El statu quo no es una posición segura: es un deterioro progresivo con dos destinos posibles, ambos peores que el cambio.</p>
-      <div class="box-danger">
-        <div class="box-label">Destino 1 — Desregulación impuesta</div>
-        <p style="margin:0">El gobierno avanza con la desregulación. Los Colegios pierden su razón de ser, su poder de policía y su base institucional. La sociedad queda completamente desprotegida.</p>
-      </div>
-      <div class="box-warning">
-        <div class="box-label">Destino 2 — Irrelevancia gradual</div>
-        <p style="margin:0">Sin desregulación formal pero sin propuesta proactiva, las franquicias siguen creciendo, la informalidad se consolida y el Colegio se convierte en institución que matricula a una minoría cada vez más pequeña del mercado real.</p>
-      </div>
-
-      <h2 class="subsection-title" id="s6-3">6.3 La negociación con el legislador: dar para recibir</h2>
-      <p>El Colegio ofrece: regularización de miles de trabajadores informales sin dejar a nadie sin empleo. A cambio exige: poder de policía simple, expeditivo y efectivo. Sanciones sin proceso judicial largo, multas ejecutables, prohibición de ejercer con efecto inmediato para reincidentes.</p>
-      <p>Hay un argumento político que ningún legislador puede ignorar: esos miles de agentes informales son trabajadores reales, con familias, con ingresos que dependen de esa actividad. Nadie va a votar algo que los deje en la calle. Pero tampoco debería votar algo que los deje desprotegidos y a merced de las plataformas que los van a uberizar. La adscripción es la única propuesta que resuelve los dos problemas: regulariza a quienes ya existen y los protege institucionalmente. El gobierno los "libera" entregándolos al mercado sin red. El Colegio los regulariza dándoles identidad, formación y un camino de crecimiento.</p>
-      <p class="destacado">La regularización no es una concesión gratuita: es una moneda de cambio con precio claro. A cambio, el Colegio exige poder de policía con <strong>dos brazos</strong>: hacia adentro, sobre corredores y agentes registrados; y hacia afuera, sobre quien opere fuera del sistema. El que quiera trabajar en el mercado inmobiliario tiene dos opciones, ambas dentro del sistema colegial. El que elija quedarse afuera asume las consecuencias inmediatas. Eso no es un monopolio: es un mercado regulado con reglas claras e iguales para todos.</p>
-      <div class="box-key">
-        <div class="box-label">El argumento de tres columnas para el legislador</div>
-        <p style="margin:0"><strong>El Adscripto Inmobiliario gana:</strong> identidad verificable, formación reconocida, respaldo institucional y camino hacia la matrícula plena.<br><strong>El corredor gana:</strong> sistema limpio, fin de la guerra judicial, herramientas reales de control.<br><strong>El ciudadano gana:</strong> sabe quién le intermedia, verifica con un QR, tiene a quién reclamarle, tiene al Colegio como primera instancia sin juicio.<br>Ninguna otra posición ofrece ese resultado para las tres partes al mismo tiempo.</p>
-      </div>
-
-      <h3 class="sub-subsection">6.3.1 La relación 1 a 10: garantía concreta para el ciudadano</h3>
-      <p>Hoy no existe ningún límite. Con el límite de cinco (5) Adscriptos Inmobiliarios por Corredor Responsable, la supervisión deja de ser nominal y se vuelve posible. Para el ciudadano que compra o vende, hay un profesional matriculado, identificado y responsable que puede ser alcanzado, interpelado y sancionado.</p>
-
-      <h3 class="sub-subsection">6.3.2 Más matriculados, más profesionales formados</h3>
-      <p>El límite de cinco (5) obliga a las franquicias a incorporar más Corredores Matriculados activos. No es restricción al empleo: es oportunidad de empleo calificado. A mediano plazo, el sistema genera más matriculados, fortalece la base colegial y reduce estructuralmente la informalidad.</p>
-
-      <h3 class="sub-subsection">6.3.3 El Colegio como primera instancia: alivio para la justicia</h3>
-      <p>Hoy cada conflicto tiene un solo camino: denuncia penal o demanda civil, con años de proceso. Con esta propuesta, el Colegio actúa como primera instancia: instruye el sumario, aplica sanción administrativa y suspende la adscripción en semanas, con personas que conocen el negocio, sin costo para el Estado.</p>
-      <p class="destacado">El legislador que apoya esta propuesta descarga al sistema judicial de un volumen significativo de causas que hoy lo saturan innecesariamente. Es un argumento que trasciende el sector inmobiliario.</p>
-
-      <h2 class="subsection-title" id="s6-4">6.4 La dimensión laboral: un límite claro</h2>
-      <p>La vinculación laboral entre el Adscripto Inmobiliario y el Corredor Responsable en sus aspectos laborales, previsionales e impositivos es materia del Ministerio de Trabajo y de la legislación laboral vigente, no del Colegio. El Colegio dice cómo debe ejercerse profesionalmente la actividad; el Estado decide cómo se instrumenta laboralmente esa relación.</p>
-      <p class="destacado">El Colegio Profesional ejerce exclusivamente el control deontológico y el registro de la adscripción. La naturaleza, formato y regularidad del vínculo contractual privado entre las partes pertenece estrictamente a la esfera del derecho privado y comercial de los contratantes, debiendo encuadrarse en la normativa nacional aplicable.</p>
-
-      <h2 class="subsection-title" id="s6-5">6.5 El riesgo sobre los honorarios y la distinción con la comisión al Adscripto Inmobiliario</h2>
-      <p>Distinción fundamental: el Corredor Inmobiliario Matriculado cobra <strong>honorarios</strong> por su trabajo profesional. El Adscripto Inmobiliario no cobra honorarios: recibe una <strong>comisión</strong> que el Corredor Responsable le paga de los suyos. El ciudadano siempre le paga al Corredor Responsable, nunca directamente al Adscripto Inmobiliario.</p>
-
-      <h2 class="subsection-title" id="s6-6">6.6 Cómo se ordenan las estructuras de redes inmobiliarias</h2>
-      <p>La propuesta impone a las estructuras de redes inmobiliarias las mismas obligaciones que tienen los corredores matriculados independientes. Efectos concretos:</p>
-      <ul class="bullets">
-        <li><strong>Costo de adscripción por Adscripto Inmobiliario</strong>Con cientos de agentes, ese costo es significativo y recurrente. El modelo de escala masiva se encarece.</li>
-        <li><strong>Límite de cinco (5) Adscriptos Inmobiliarios por Corredor Responsable</strong>Una franquicia con 200 agentes necesita al menos 20 Corredores Responsables matriculados activos. Los costos operativos se multiplican.</li>
-        <li><strong>Formación estandarizada obligatoria</strong>Las estructuras de redes inmobiliarias quedan sujetas a un estándar mínimo que el Colegio define y controla.</li>
-        <li><strong>Poder de policía colegial</strong>Cualquier conducta irregular de los agentes es sancionable por el Colegio.</li>
-        <li><strong>Estructura real obligatoria</strong>El nombre de marca no exime de las obligaciones colegiales.</li>
-      </ul>
-      <p class="destacado">La propuesta no le da vía libre a las franquicias. Les impone exactamente las mismas obligaciones que tienen los corredores matriculados independientes.</p>
-
-      <h2 class="subsection-title" id="s6-7">6.7 La propuesta nivela el campo de juego</h2>
-      <p>Esta propuesta no es anti-franquicia: es pro-igualdad. Hoy el mercado no es libre: es desigual. El corredor matriculado paga matrícula, asume responsabilidad civil y penal y cumple normativas. La franquicia con agentes informales no tiene ninguno de esos costos.</p>
-      <p class="destacado">Decir "queremos prohibir las franquicias" es una posición corporativa fácil de atacar. Decir "queremos que todos jueguen con las mismas reglas" es una posición que el propio discurso liberal del gobierno no puede rebatir sin contradecirse.</p>
-
-      <h2 class="subsection-title" id="s6-8">6.8 Soberanía, uberización y el valor de lo humano</h2>
-      <p>Las grandes franquicias internacionales construyen criterios de valuación y estándares de comercialización desde afuera, aplicados por personas sin formación local y sin vínculo con la realidad socioeconómica del territorio. El Corredor Inmobiliario Matriculado, formado localmente y responsable ante sus comitentes, es la garantía de que la valoración del suelo argentino la hacen los argentinos.</p>
-
-      <p>Pero más allá del territorio y los precios, hay una dimensión humana de esta discusión que rara vez se nombra con la claridad que merece. <strong>La desregulación inmobiliaria no libera al ciudadano: lo entrega.</strong> Le quita un profesional con nombre, matrícula, responsabilidad legal y un Colegio que lo controla, y lo deja frente a una plataforma tecnológica global que optimiza para su propio margen, que no tiene cara ni dirección local, y que no responde ante ninguna institución argentina cuando algo sale mal.</p>
-
-      <p>Esto ya ocurrió en otros sectores. Los taxistas lo vivieron con las plataformas de transporte. Los repartidores lo viven hoy. Trabajadores que eran independientes, con sus propios clientes y su propia dignidad profesional, se convirtieron en piezas intercambiables de un algoritmo que se queda con el margen y les deja las migajas. Sin obra social, sin jubilación, sin poder de negociación. El corredor independiente que hoy tiene su propia inmobiliaria, bajo un esquema desregulado, termina siendo un colaborador de una proptech global que le fija las condiciones y puede desactivarlo con un clic. No es progreso: es una forma nueva y más sofisticada de dependencia.</p>
-
-      <div class="box-danger">
-        <div class="box-label">El destino concreto ya tiene nombre</div>
-        <p style="margin:0">The Real REMAX Group — 180.000 agentes en más de 120 países, sin oficinas, sin matrícula, sin responsabilidad local, valuado en 880 millones de dólares. Eso no es el futuro: ya está ocurriendo. Y la desregulación argentina le abre la puerta.</p>
-      </div>
-
-      <p>La <strong>calidez humana</strong> de una operación inmobiliaria — el profesional que conoce el barrio, que acompaña la negociación, que explica cada documento, que está disponible cuando surge un problema, que pone su nombre y su matrícula en cada operación — se reemplaza por un chatbot y un recorrido virtual. Una familia que toma la decisión más importante de su vida económica no merece un algoritmo: merece una persona que responde por lo que dice y hace. La <strong>despersonalización</strong> de la operación más importante de la vida no es modernización: es empobrecimiento de los vínculos que sostienen una sociedad.</p>
-
-      <p>Desregular los honorarios en una profesión que además no es de paso obligatorio no baja los costos: abre la puerta a la competencia desleal. Las grandes plataformas pueden cobrar honorarios mínimos con tal de comerse el mercado, liquidar a los profesionales independientes, y una vez sin competencia real, fijar las condiciones como quieren. La concentración de riqueza en pocas empresas tecnológicas globales no es un efecto secundario: es el destino natural de este camino.</p>
-
-      <p class="destacado">Mantener la profesión regulada invita a la sociedad a formarse. Le dice a un joven que vale la pena estudiar, que el esfuerzo tiene recompensa, que hay un camino formal con reconocimiento y futuro. Sociedades con ciudadanos formados y profesiones reguladas tienen mejor calidad de vida y ecosistemas económicos más sólidos. Los Colegios no son un freno al mercado: son una apuesta por el tejido social.</p>
-
-      <h3 class="sub-subsection">Los Colegios como productores de conocimiento público</h3>
-      <p>Hay una dimensión que el proyecto de desregulación ignora completamente. COCIR Rosario, desde diciembre de 2020, produce en conjunto con el Instituto de Investigaciones Económicas de la Facultad de Ciencias Económicas y Estadística de la UNR relevamientos semestrales ininterrumpidos de ocupación y vacancia de locales comerciales en Rosario. El último, de diciembre de 2025, relevó más de 7.400 locales en el área central. Esos datos le sirvieron al gobierno local para tomar decisiones de política comercial y urbana. Ese mismo Colegio provee información al gobierno provincial para decisiones vinculadas a políticas de seguridad. Produce informes sobre la evolución de los valores de alquiler frente a la inflación y respecto del salario, accesibles gratuitamente para cualquier ciudadano.</p>
-      <div class="box-key">
-        <div class="box-label">Lo que ninguna proptech hace</div>
-        <p style="margin:0">Ninguna plataforma tecnológica global produce conocimiento público sobre el mercado local, lo comparte con el gobierno ni contribuye a la planificación urbana. Extraen datos del mercado y los convierten en ventaja competitiva privada. El Colegio hace lo inverso: toma datos del mercado y los convierte en bien público.</p>
-      </div>
-      <p>Desarticular los Colegios no es solo abrir el mercado: es destruir una institución que produce conocimiento público, que vincula profesionales con la academia, que le habla al gobierno con datos propios y que le devuelve a la sociedad información que de otro modo nadie produciría. Eso degrada a la sociedad. En un mundo que ya camina demasiado rápido hacia la deshumanización de los vínculos, sumar otro motivo para que la gente se relacione con algoritmos en lugar de con personas no es modernización: es retroceso.</p>
-
-      <h2 class="subsection-title" id="s6-9">6.9 El argumento definitivo frente a la desregulación</h2>
-      <p>      <p>El debate sobre desregulación tiene una pregunta de fondo: ¿la regulación produce mejores resultados para la sociedad que el mercado libre? La respuesta de esta propuesta es concreta: la regulación no crea un monopolio, crea un estándar mínimo de responsabilidad. Cualquiera puede participar en el mercado inmobiliario, pero el ciudadano tiene derecho a saber quién responde cuando algo sale mal. Sin regulación, ese estándar se fragmenta y queda librado a mecanismos privados que no todos pueden activar.</p>
-
-      <p>Tres objeciones recurrentes encuentran respuesta en este modelo:</p>
-
-      <p><strong>La primera:</strong> que la matrícula crea barreras. Al contrario — hoy solo hay dos opciones: tener la matrícula completa o trabajar en la informalidad. La adscripción abre una tercera vía: entrar al mercado de manera legal y ordenada, en tránsito hacia la formación plena.</p>
-
-      <p><strong>La segunda:</strong> que los honorarios regulados son un cartel. Los honorarios reflejan el costo real de un servicio con garantías. Alguien sin formación ni responsabilidad puede cobrar menos — pero le traslada el riesgo al ciudadano. La regulación no encarece: transparenta lo que vale la seguridad.</p>
-
-      <p><strong>La tercera:</strong> que la tecnología hace innecesaria la intermediación. La tecnología facilita la información, no elimina el riesgo. Cuando algo sale mal en una operación, el ciudadano necesita a alguien identificado, con patrimonio y con una institución que lo respalde. Sin regulación, ese alguien no existe.</p>
-
-      <p class="destacado">La responsabilidad puede existir sin regulación obligatoria — vía contratos, seguros o reputación — pero esos mecanismos tienen un costo que no todos pueden absorber. La regulación reduce el costo de acceder a la responsabilidad para quien menos recursos tiene para exigirla por cuenta propia.</p>
-
-      <p>Las leyes que el gobierno dice querer modernizar tienen entre 15 y 25 años de vigencia. La Ley 13.154 de Santa Fe tiene 15 años. La ley de Entre Ríos, la más antigua del país, tiene más de 25. Fueron sancionadas por legisladores que evaluaron la necesidad de regular esta actividad. Decir hoy que son obsoletas es contradictorio: fueron actualizaciones en su momento, y esta propuesta es la actualización de hoy.</p>
-
-      <h2 class="subsection-title" id="s6-10">6.10 Escala provincial versus nacional</h2>
-      <p>Ir por una ley nacional implicaría ceder al Estado nacional exactamente la herramienta que hoy protege a los Colegios. La estrategia correcta: Santa Fe lidera con su propia modificación de la Ley 13.154, el modelo funciona y genera datos, y la unión de los Colegios lo impulsa como modelo replicable provincia por provincia.</p>
-    </div>
-
-    <hr class="divider">
-
-        <!-- 8. ESTRATEGIA -->
-    <div class="section" id="s7">
-      <div class="section-number">Sección 07</div>
-      <h1 class="section-title">7. Estrategia de implementación</h1>
-
-      <div class="box-danger">
-        <div class="box-label">⚠ Alerta de plazo</div>
-        <p style="margin:0">El gobierno nacional ha mostrado su intención de avanzar con la desregulación del corretaje inmobiliario, y este nuevo anteproyecto indica que la amenaza es inminente. Las fases 1 y 2 deben ejecutarse <strong>en paralelo</strong>.</p>
-      </div>
-      <p>Esta sección describe el camino concreto para llevar la propuesta desde su estado actual —documento de análisis institucional— hasta su adopción como política pública provincial y modelo replicable a nivel nacional. Se propone una secuencia de cuatro fases, cada una con un objetivo específico y un actor institucional central. Las fases son progresivas pero no excluyentes: algunas pueden avanzar en paralelo según el contexto político e institucional de cada momento.</p>
-
-      <div class="phases">
-        <div class="phase">
-          <div class="phase-num">1</div>
-          <div class="phase-title">Validación interna</div>
-          <div class="phase-sub">Encuesta en Rosario — COCIR</div>
-        </div>
-        <div class="phase">
-          <div class="phase-num">2</div>
-          <div class="phase-title">Respaldo académico</div>
-          <div class="phase-sub">UNR — curso y aval institucional</div>
-        </div>
-        <div class="phase">
-          <div class="phase-num">3</div>
-          <div class="phase-title">Expansión nacional</div>
-          <div class="phase-sub">COFECI y FIRA — modelo replicable</div>
-        </div>
-        <div class="phase">
-          <div class="phase-num">4</div>
-          <div class="phase-title">Reforma legislativa</div>
-          <div class="phase-sub">Legislatura Santa Fe — Ley 13.154</div>
-        </div>
-      </div>
-
-      <h2 class="subsection-title" id="s7-1">7.1 Fase 1 — Validación interna (Rosario)</h2>
-      <p>Encuesta anónima a Corredores Inmobiliarios Matriculados de COCIR con tres objetivos: validar el apoyo interno, medir la magnitud del ejercicio informal en Rosario y generar datos concretos para presentar ante legisladores. Cuatro bloques: perfil, realidad del mercado, opinión sobre la propuesta, y preguntas abiertas.</p>
-
-      <h2 class="subsection-title" id="s7-2">7.2 Fase 2 — Respaldo académico (UNR)</h2>
-      <p>Presentar la propuesta ante la Universidad Nacional de Rosario para obtener: respaldo académico con participación de ciencias sociales y el compromiso de dictar el curso de formación para la adscripción del Adscripto Inmobiliario. El sello de la UNR transforma corporativismo profesional en política pública con sustento.</p>
-
-      <h2 class="subsection-title" id="s7-3">7.3 Fase 3 — Expansión nacional</h2>
-      <p>Con la propuesta validada en Rosario y respaldada por la UNR, llevarla a COFECI y FIRA para su adopción como modelo replicable. El objetivo no es una ley nacional, sino un modelo de ley provincial uniforme que cada jurisdicción adopte con sus particularidades sobre una base común.</p>
-
-      <h2 class="subsection-title" id="s7-4">7.4 Fase 4 — El camino legislativo y el camino colegial</h2>
-      <p>El sistema de Adscripto Inmobiliario puede implementarse por dos caminos que no son excluyentes sino complementarios y secuenciales.</p>
-
-      <p><strong>El camino colegial — sin esperar la Legislatura:</strong> El Reglamento del Tribunal de Ética y Disciplina puede modificarse con el 75% de los jueces de ambas salas, sin necesidad de Asamblea ni de intervención legislativa. El Estatuto del Colegio puede reformarse mediante Asamblea Extraordinaria. Con esos dos cambios, el Colegio queda habilitado para crear y administrar el Registro de Adscriptos Inmobiliarios, el Tribunal queda habilitado para investigar y sancionar a Adscriptos y Corredores Responsables, y el sistema tiene respaldo institucional sólido. Este es el camino más rápido y el menos dependiente de factores externos.</p>
-
-      <p><strong>La limitación honesta del camino colegial:</strong> sin reforma de la Ley 13.154, el poder de policía del Colegio alcanza exclusivamente a quienes estén dentro del sistema — los matriculados y los Adscriptos voluntariamente registrados. Quien elija operar fuera del sistema no puede ser sancionado directamente por el Colegio; solo puede ser denunciado a la Justicia. Esa limitación es real y hay que decirla con claridad.</p>
-
-      <p><strong>El camino legislativo — reforma de la Ley 13.154:</strong> para que el sistema tenga efectos jurídicos plenos frente a terceros y poder de policía real hacia afuera, es necesaria la reforma legislativa. Esto requiere presentar un proyecto ante la Legislatura de Santa Fe, obtener mayoría y promulgación del Gobernador. El proceso puede extenderse entre meses y años según la voluntad política.</p>
-
-      <p class="destacado">Implementar el sistema colegial primero no es una renuncia a la reforma legislativa — es el camino que la hace posible y necesaria. Un sistema funcionando, con datos, con Adscriptos registrados, con sanciones aplicadas y con el respaldo documentado de los matriculados, es el argumento más poderoso ante la Legislatura. No pedimos que aprueben algo teórico: pedimos que den respaldo legal a algo que ya existe y funciona. Ese es el orden estratégico correcto.</p>
-
-      <h2 class="subsection-title" id="s7-5">7.5 El poder de policía: condición no negociable</h2>
-      <p>La propuesta no tiene valor sin un poder de policía efectivo. Es la contraparte irrenunciable que el Colegio exige a cambio de regularizar la situación de los Adscriptos Inmobiliarios. Sin herramientas reales de control y sanción, la adscripción se convierte en un papel más que nadie respeta.</p>
-      <p>El argumento central del proyecto — que los Colegios aplican sanciones "discrecionales sin control judicial" — ya fue rechazado por la Cámara Nacional de Apelaciones en lo Contencioso Administrativo Federal. Vale aclarar que el sancionado siempre tiene la posibilidad de apelar ante la Justicia Provincial como garantía constitucional.: resolvió que las sanciones sobre matriculados son competencia exclusiva del Colegio profesional — no del Estado — y que sancionar a un matriculado por fuera del Colegio viola el principio de reserva legal. El legislador puede ampliar esa potestad con plena base constitucional y respaldo jurisprudencial.</p>
-      <p>En el mismo sentido, la Corte Suprema de Santa Fe en el fallo <em>Astolfi</em> (A. y S. T. 297, mayo 2020) estableció la división de roles que legitima este modelo: <strong>al Colegio le corresponde definir lo ético y sancionar; a los jueces, verificar si la falta se cometió</strong>. El Colegio actúa primero, la Justicia controla después. Esa es exactamente la arquitectura de poder de policía que esta propuesta pide.</p>
-
-      <ul class="bullets">
-        <li><strong>Sanciones administrativas directas</strong>Sin necesidad de proceso judicial previo. El Colegio instruye, resuelve y aplica. La vía judicial queda para impugnaciones, no como requisito para actuar.</li>
-        <li><strong>Suspensión y cancelación inmediata</strong>Ante infracciones graves o reincidencia, ejecutable en el acto sin esperar resolución judicial.</li>
-        <li><strong>Multas económicas significativas</strong>Calibradas para que la infracción sea más costosa que el beneficio de operar fuera del sistema.</li>
-        <li><strong>Publicidad obligatoria de sanciones</strong>El Colegio publica quién fue sancionado, por qué y con qué consecuencias. La reputación es el activo más sensible del sector.</li>
-        <li><strong>Responsabilidad solidaria del Corredor Responsable</strong>Si un Adscripto Inmobiliario opera sin adscripción vigente o excede sus actos habilitados, el Corredor Responsable es sancionado junto con él. Esto alinea el incentivo: al Corredor Responsable le conviene tener a todos sus Adscriptos Inmobiliarios registrados.</li>
-        <li><strong>Sanciones agravadas en escrituración</strong>Un Adscripto Inmobiliario que participa en una escritura incurre en la infracción más grave del sistema. Sanción inmediata, pesada y pública.</li>
-      </ul>
-
-      <p>Este esquema operativiza el poder de policía provincial mediante el principio de imputabilidad solidaria ya desarrollado en la Sección 5: el Adscripto Inmobiliario actúa bajo la responsabilidad del Corredor Responsable, y ambos responden ante el Colegio. Lo que aquí se agrega es el instrumento sancionatorio que le da efectividad a ese principio.</p>
-      <p class="destacado">Este poder de policía no es una demanda corporativa: es la garantía operativa de que la propuesta cumple su objetivo. El legislador que apoya esta propuesta tiene que entender que otorgar ese poder de policía es parte del acuerdo, no un agregado opcional.</p>
-      <p>Una objeción válida es que los actos preparatorios habilitados al Adscripto Inmobiliario son relativamente fáciles de delimitar, pero los actos exclusivos del Corredor Responsable son difíciles de fiscalizar en la práctica. La respuesta es que el control no viene de inspectores que supervisen cada operación — viene de tres mecanismos combinados: la responsabilidad solidaria del Corredor Responsable, que tiene algo concreto que perder si su Adscripto Inmobiliario se extralimita; el escribano como filtro en el momento de escrituración, donde ninguna operación se certifica sin participación registrada; y el ciudadano como denunciante, que ahora tiene un camino expeditivo de reclamo ante el Colegio. Ninguno de los tres es perfecto. Los tres juntos son infinitamente mejores que el sistema actual, donde no hay ninguno.</p>
-
-      <div class="box-danger">
-        <div class="box-label">Los dos brazos — ambos son condición no negociable</div>
-        <p style="margin:0"><strong>Brazo 1 — hacia adentro:</strong> sancionar a corredores matriculados y Adscriptos Inmobiliarios que incumplan.<br><strong>Brazo 2 — hacia afuera:</strong> sancionar directamente a quien opere fuera del sistema sin matrícula ni adscripción, sin depender de un proceso judicial. Hoy el Colegio solo actúa sobre sus matriculados. Eso deja sin consecuencias a quien simplemente elige no entrar. Sin el segundo brazo, la adscripción es un incentivo pero no una obligación con dientes.</p>
-      </div>
-
-      <h2 class="subsection-title" id="s7-6">7.6 El convenio con escribanos: control en el punto más crítico</h2>
-      <p>El momento más importante de toda operación inmobiliaria es la escrituración. Es también el punto donde la distinción entre actos del Adscripto Inmobiliario y actos del Corredor Responsable tiene mayor relevancia práctica: ningún Adscripto Inmobiliario puede participar en una firma ni suscribir documentos con efectos jurídicos.</p>
-      <p>Se propone un convenio formal entre el Colegio de Corredores Inmobiliarios y el Colegio de Escribanos de Santa Fe: el escribano actuante verifica la condición matricular de quienes participan en la operación. La implementación es simple — registro online en tiempo real, accesible mediante QR en el carnet profesional o consulta directa. Si quien se presenta no figura en el registro, la operación no se certifica sin el profesional habilitado.</p>
-      <p class="destacado">El convenio con escribanos convierte al punto más crítico de la operación en el punto de mayor control. Es el mecanismo que protege al ciudadano exactamente en el momento en que más lo necesita.</p>
-    </div>
-
-    <hr class="divider">
-
-    <!-- 8. TRAZABILIDAD FINANCIERA Y GAFI -->
-    <div class="section" id="s8">
-      <div class="section-number">Sección 08</div>
-      <h1 class="section-title">8. Dimensión de Seguridad Nacional: Trazabilidad Financiera y GAFI</h1>
-
-      <p>El mercado inmobiliario es uno de los sectores más utilizados históricamente para el lavado de activos y la financiación del terrorismo. Es un dato reconocido internacionalmente. Por esa razón, los corredores inmobiliarios matriculados son <strong>sujetos obligados ante la Unidad de Información Financiera (UIF)</strong> desde 2012 — obligación reforzada con la Resolución UIF 43/2024, en concordancia con los estándares del <strong>GAFI</strong>, organismo del que Argentina es miembro pleno desde el año 2000.</p>
-
-      <p>Las obligaciones son concretas: sistema de prevención de lavado basado en riesgo, debida diligencia sobre clientes, reportes sistemáticos mensuales ante la UIF con información de cada operación, y revisiones técnicas independientes cada dos años. El Estado tiene hoy visibilidad mensual del mercado inmobiliario gracias al sistema de matriculación.</p>
-
-      <div class="box-danger">
-        <div class="box-label">El vacío de control que nadie está calculando</div>
-        <p>La desregulación no solo elimina la obligación — <strong>elimina la figura del sujeto obligado</strong>. Esto plantea un vacío de control crítico: si cualquier actor informal puede intermediar sin matrícula, ¿sobre quién ejerce la UIF su poder de policía? ¿A quién investiga, cita o sanciona ante una operación sospechosa? ¿Quién reporta la operación? La respuesta es nadie. El mercado inmobiliario — uno de los principales vectores de lavado de activos en el mundo — quedaría sin sujeto obligado identificable.</p>
-      </div>
-
-      <p>Esto no es un argumento corporativo. Es un problema de cumplimiento de compromisos internacionales del Estado argentino. El GAFI evalúa periódicamente a sus países miembros. Una desregulación que elimine la trazabilidad financiera del mercado inmobiliario sin un sistema alternativo equivalente podría exponer a Argentina a observaciones o sanciones internacionales.</p>
-
-      <p>El sistema de adscripción resuelve esta tensión: el Adscripto Inmobiliario opera bajo la responsabilidad del Corredor Responsable, quien mantiene su condición de sujeto obligado ante la UIF por todas las operaciones en que su Adscripto Inmobiliario intervenga. La trazabilidad no se pierde — se extiende al nuevo actor bajo el paraguas del profesional matriculado.</p>
-    </div>
-
-    <hr class="divider">
-
-
-    <!-- 9. MARCO INSTITUCIONAL -->
-    <div class="section" id="s9">
-      <div class="section-number">Sección 09</div>
-      <h1 class="section-title">9. Marco institucional y alianzas estratégicas</h1>
-      <ul class="bullets">
-        <li><strong>COCIR — Rosario</strong>Institución impulsora de la propuesta y responsable de la administración de la adscripción en la jurisdicción de Rosario.</li>
-        <li><strong>Universidad Nacional de Rosario (UNR)</strong>Responsable del curso de formación para Agentes, otorgando validez académica al proceso y respaldo institucional a la propuesta.</li>
-        <li><strong>COFECI y FIRA</strong>Instituciones representativas de los Colegios a nivel nacional, instancia para la adopción de la propuesta en otras jurisdicciones provinciales.</li>
-        <li><strong>Legislatura de Santa Fe</strong>Ámbito para la modificación o reglamentación de la Ley 13.154 que incorpore la figura del Adscripto Inmobiliario.</li>
-        <li><strong>Colegios provinciales</strong>Aliados estratégicos para replicar el modelo, comenzando por las provincias con mayor presencia de franquicias.</li>
-      </ul>
-    </div>
-
-    <hr class="divider">
-
-    <!-- 9. COMPARACIÓN DE ALTERNATIVAS -->
-    <div class="section" id="s10">
-      <div class="section-number">Sección 10</div>
-      <h1 class="section-title">10. Comparación de alternativas</h1>
-
-      <p>Un análisis sólido no solo presenta su propio argumento: demuestra que las alternativas fueron analizadas y descartadas con fundamento. A continuación se comparan las cuatro posiciones posibles frente al problema del ejercicio informal de la actividad inmobiliaria.</p>
-
-      <h2 class="subsection-title" id="s10-1">10.1 Desregulación total</h2>
-      <p>Propone que cualquier persona ejerza el corretaje sin formación, sin registro y sin control. España adoptó este modelo y hoy lucha contra el intrusismo. Los ciudadanos quedan desprotegidos en las decisiones más importantes de su vida y las franquicias multinacionales dominan el mercado.</p>
-      <div class="box-danger"><div class="box-label">Veredicto</div><p style="margin:0">Resuelve el problema de la informalidad eliminando la profesión. No es modernización: es capitulación.</p></div>
-
-      <h2 class="subsection-title" id="s10-2">10.2 Registro de idoneidad estatal</h2>
-      <p>El Estado crea un registro nacional de agentes habilitados por idoneidad, sin participación de los Colegios. Ecuador intentó un esquema similar con resultado de alta informalidad por falta de poder de policía efectivo. Los Colegios quedan estructuralmente afuera del sistema.</p>
-      <div class="box-danger"><div class="box-label">Veredicto</div><p style="margin:0">Tiene forma de solución pero vacía de contenido a los Colegios. Es el escenario más peligroso a largo plazo para la institucionalidad profesional.</p></div>
-
-      <h2 class="subsection-title" id="s10-3">10.3 Statu quo con más poder policial</h2>
-      <p>Mantener el esquema actual y pedir más herramientas para combatir la informalidad. Más de diez años de historia demuestran que no funciona. La Justicia es inconsistente, los recursos son limitados y el statu quo es la principal munición del gobierno para justificar la desregulación total.</p>
-      <div class="box-warning"><div class="box-label">Veredicto</div><p style="margin:0">La posición más cómoda y la más ineficaz. Prolonga el problema sin resolverlo y acelera el deterioro institucional.</p></div>
-
-      <h2 class="subsection-title" id="s10-4">10.4 Adscripción colegial — esta propuesta</h2>
-      <p>El Colegio regula a todos los actores, forma a los Adscriptos Inmobiliarios, registra vínculos, controla el ejercicio y sanciona administrativamente. El ciudadano está protegido en todos los niveles. Las franquicias operan bajo las mismas reglas que todos. El Estado no gasta nada.</p>
-      <div class="box-key"><div class="box-label">Veredicto</div><p style="margin:0">La única posición que resuelve la informalidad, protege al ciudadano, fortalece al Colegio y desarma el argumento de la desregulación al mismo tiempo.</p></div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- 10. CONCLUSIÓN -->
-    <div class="section" id="s11">
-      <div class="section-number">Sección 10</div>
-      <h1 class="section-title">11. Conclusión</h1>
-      <p>La profesión del Corredor Inmobiliario nació para proteger a la sociedad. Ese es su mandato fundacional y su razón de ser. Hoy, ese mandato exige reconocer que el mercado cambió, que decenas de miles de personas ejercen una actividad sin el marco que las habilita, y que seguir ignorando esa realidad no protege a nadie.</p>
-      <p>La historia siempre avanzó hacia la especialización. En cada caso la tendencia no fue impuesta: fue elegida por la sociedad porque quiso lo mejor preparado para lo que más importa. Los legisladores que sancionaron las leyes de corretaje tomaron exactamente esa decisión. Y la tendencia no se detuvo — Entre Ríos exige hoy licenciatura de grado, Rosario tiene la primera licenciatura pública del país en la carrera. La dirección es más especialización, no menos. Desregular en 2026 no es modernizar: es ir a contramano de lo que la propia sociedad eligió.</p>
-
-      <p>Todo cambia. Todo evoluciona. La medicina, el derecho, la arquitectura, la tecnología — ninguna profesión opera hoy como hace veinte años. La inteligencia artificial existe. Las franquicias se fusionan con plataformas tecnológicas globales. El mundo no espera a quienes no se adaptan. O evolucionás, o te llevan puesto. La pregunta no es si la profesión inmobiliaria debe evolucionar: es si esa evolución la conducen quienes conocen el oficio, o quienes solo conocen la ideología del mercado libre.</p>
-      <p>La evidencia internacional muestra que los mercados inmobiliarios más desarrollados —incluyendo Estados Unidos, que el gobierno cita como modelo— funcionan con sistemas de dos niveles con formación obligatoria, registro y responsabilidad. La desregulación sin control no es modernización: es retroceso.</p>
-      <p>La evidencia nacional muestra que la vía judicial es inconsistente, desgastante y sin resultados uniformes. La vía legislativa, con una iniciativa proactiva y respaldada por datos, es el único camino que puede generar un cambio real y duradero.</p>
-      <p class="destacado">El 27 de abril de 2026, Sturzenegger confirmó que en junio enviará la desregulación al Congreso. El tiempo de planificar se acabó. Liderar esa transformación desde adentro —con formación, con control, con respaldo académico y con datos— es la única manera de garantizar que la regulación del mercado inmobiliario siga siendo responsabilidad de quienes conocen la profesión, y no una decisión política impuesta desde afuera. Ese momento es ahora.</p>
-
-      <hr class="divider-gold">
-
-      <h2 class="subsection-title">La oportunidad que viene después</h2>
-      <p>Hay una visión de futuro que este documento quiere dejar planteada. Hoy los Colegios gastan una parte enorme de su energía, sus recursos humanos y económicos peleando contra algo que no pueden eliminar: la informalidad de los agentes. Si esa batalla se resuelve con la adscripción, toda esa energía se libera para construir algo mucho más valioso.</p>
-      <p>Un Colegio que no está en guerra permanente con las franquicias puede dedicarse a construir herramientas que le den seguridad y celeridad a la sociedad para resolver sus necesidades inmobiliarias. Plataformas fiables que reduzcan tiempos y procesos, que acompañen la digitalización, que simplifiquen trámites — desde fianzas de locación hasta gestión documental — sin que nadie tenga que viajar a firmar un papel. Herramientas de gestión para el Corredor Responsable y los Adscriptos Inmobiliarios, y una forma de trabajar con practicidad para la sociedad. Un sistema que detecte automáticamente inhibiciones o deudas sobre un inmueble antes de que se firme nada. Una plataforma que vincule la operación con AFIP para simplificar honorarios. Contratos generados automáticamente con todos los datos cargados. Alertas para el inquilino sobre vencimientos. Todo trazable, todo auditable, todo transparente. La infraestructura digital que nace para administrar la adscripción es solo el punto de partida.</p>
-      <div class="box-key">
-        <div class="box-label">La respuesta a Sturzenegger</div>
-        <p style="margin:0">Dice que los Colegios son estructuras del pasado que frenan la innovación. La respuesta no es defenderse: es demostrar que los Colegios son exactamente los que deberían liderar esa innovación — porque son los únicos que van a hacerlo en beneficio del ciudadano y no de los accionistas de una plataforma global.</p>
-      </div>
-      <p>Esta propuesta no impone un destino: cierra un círculo. Dentro de ese círculo, cada uno se para donde quiere y puede. El Adscripto Inmobiliario que encuentra su lugar en esa función y la ejerce con responsabilidad. El que decide crecer y obtiene la matrícula plena de Corredor Responsable. El que va más lejos y suma la licenciatura universitaria. El sistema no define techos: define reglas claras, comunes e iguales para todos.</p>
-
-      <p>Y todo eso existe por una sola razón: para que la sociedad pueda acceder a un servicio inmobiliario de excelencia, regulado y ordenado. Para que cada persona que compra, vende o alquila una propiedad sepa que del otro lado hay alguien formado, habilitado y responsable. Para que el mercado inmobiliario de Santa Fe sea un modelo de profesionalismo, no una zona gris.</p>
-
-      <p class="destacado"><strong>Inclusión con legalidad.</strong></p>
-    </div>
-
-    <hr class="divider">
-
-    <!-- SECCIÓN 11 -->
-    <div class="section" id="s12">
-      <div class="section-number">Sección 12</div>
-      <h1 class="section-title">12. Esquema de funcionamiento del sistema de Adscripto Inmobiliario</h1>
-      <p>Este capítulo describe los lineamientos operativos básicos del sistema de adscripción. No constituye un reglamento definitivo, sino un esquema inicial que permite visualizar cómo funcionaría el sistema en la práctica.</p>
-
-      <h2 class="subsection-title" id="s12-1">12.1 Identificación y registro</h2>
-      <p>Todo Adscripto Inmobiliario deberá estar inscripto en el registro del Colegio de la jurisdicción correspondiente. El registro es individual, nominativo y público. Cada Adscripto Inmobiliario recibe un número de adscripción único con código QR que permite verificar en tiempo real su condición registral, el Corredor Responsable y el vencimiento de su adscripción. Cualquier ciudadano, escribano u organismo de control puede verificar esta información online.</p>
-      <p>La identificación pública se compone del número de matrícula del Corredor Responsable seguido de un número de orden correlativo. Ejemplo: el primer Adscripto Inmobiliario del corredor 1234 es 1234/01, el segundo 1234/02, y así sucesivamente. <strong>La numeración es correlativa histórica y nunca se reutiliza:</strong> cuando un Adscripto Inmobiliario se da de baja, su número queda marcado como "Inactivo Histórico" — no se asigna a ningún ingresante posterior. Esto protege la trazabilidad jurídica: si un Adscripto Inmobiliario participó en una operación o fue objeto de un reclamo bajo un número determinado, ese número no puede ser confundido con la identidad de otra persona en el futuro. El control del límite de cinco (5) Adscriptos Inmobiliarios activos simultáneos lo realiza el sistema sobre los registros activos en tiempo real.</p>
-
-      <h2 class="subsection-title" id="s12-2">12.2 Límite de Adscriptos Inmobiliarios por Corredor Responsable</h2>
-      <p>Cada Corredor Responsable puede tener a su cargo un máximo de <strong>cinco (5) Adscriptos Inmobiliarios registrados</strong> en forma simultánea. Este límite responde a la capacidad real de supervisión responsable. Una inmobiliaria puede contar con varios Corredores Responsables matriculados, ampliando su capacidad proporcionalmente.</p>
-
-      <h2 class="subsection-title" id="s12-3">12.3 Costo, periodicidad y distribución</h2>
-      <ul class="bullets">
-        <li><strong>Costo</strong>La adscripción equivale al 90% del valor de la matrícula del Corredor Inmobiliario, reflejando que es una habilitación de segundo nivel.</li>
-        <li><strong>Periodicidad anual</strong>Permite flexibilidad ante cambios de Corredor Responsable o suspensión temporal de actividad.</li>
-        <li><strong>Pago íntegro por el Corredor</strong>El costo total de la adscripción anual es a cargo del Corredor Responsable. El Colegio Profesional regula exclusivamente el registro de adscripción deontológica y la habilitación para la realización de actos preparatorios del corretaje. La naturaleza jurídica del vínculo contractual —sea laboral, comercial o de colaboración asociativa— pertenece estrictamente a la esfera del derecho privado entre el Corredor Responsable y el Adscripto Inmobiliario, debiendo encuadrarse en la normativa nacional vigente.</li>
-        <li><strong>Alertas automáticas</strong>El sistema del Colegio notifica vencimientos con anticipación suficiente para la renovación.</li>
-      </ul>
-
-      <h2 class="subsection-title" id="s12-4">12.4 Vínculo Corredor Responsable-Adscripto Inmobiliario: exclusividad y transferencia</h2>
-      <p>La relación es exclusiva: un Adscripto Inmobiliario trabaja para un único Corredor Responsable en todo momento. Si cambia de Corredor Responsable, comunica formalmente al Colegio. La adscripción se transfiere al nuevo Corredor Responsable, quien debe aceptar la responsabilidad. Durante la transferencia, el Adscripto Inmobiliario no puede operar. El Corredor Responsable saliente queda liberado por operaciones posteriores a la fecha de transferencia registrada.</p>
-
-      <h2 class="subsection-title" id="s12-5">12.5 Formación obligatoria</h2>
-      <p>Para obtener la adscripción, el Adscripto Inmobiliario debe completar un curso de formación obligatoria diseñado y dictado con la UNR. Contenidos mínimos: marco legal del corretaje, tipos de operaciones, ética profesional, derechos y obligaciones del Adscripto Inmobiliario, actos habilitados vs. exclusivos del Corredor Matriculado, y procedimientos de denuncia. La renovación anual estará condicionada al cumplimiento de <strong>dos condiciones simultáneas</strong>: la vigencia del vínculo con el Corredor Responsable y la acreditación de instancias de actualización formativa periódica. No alcanza con pagar: hay que seguir vinculado y seguir formándose.</p>
-      <p>La formación obligatoria no es solo un requisito de habilitación: es una herramienta de elevación. Eleva la calidad del servicio al ciudadano de manera continua — no solo al ingreso, sino en cada renovación. Y eleva la formación de las personas: muchos de quienes hoy operan como agentes informales accederán por primera vez a educación profesional formal. El sistema no solo los identifica y los controla: los forma. Introduce la idea de que aprender en este sector es un proceso permanente, no un trámite de una sola vez. Ese cambio cultural va más allá del sector inmobiliario.</p>
-
-      <h2 class="subsection-title" id="s12-6">12.6 Período de transición</h2>
-      <p>Se propone una ventana de <strong>180 días</strong> desde la entrada en vigor del sistema para que quienes hoy operan informalmente regularicen su situación sin penalización. Vencido ese plazo, quien opere sin adscripción vigente incurrirá en las infracciones establecidas.</p>
-
-      <h2 class="subsection-title" id="s12-7">12.7 Régimen básico de infracciones</h2>
-      <ul class="bullets">
-        <li><strong>Infracción leve</strong>Operar sin portar credencial vigente, no renovar en término, incumplir actualización formativa. Sanción: apercibimiento y multa.</li>
-        <li><strong>Infracción grave</strong>Realizar actos exclusivos del Corredor Matriculado, operar con adscripción vencida, ejercer para un Corredor Responsable diferente al registrado. Sanción: suspensión 30 a 180 días y multa significativa.</li>
-        <li><strong>Infracción gravísima</strong>Operar sin adscripción después del período de transición, suplantar identidad de un Corredor Matriculado, participar en escrituración sin habilitación. Sanción: cancelación de la adscripción y multa máxima. El Corredor Responsable es sancionado solidariamente.</li>
-      </ul>
-      <p>Todas las sanciones son aplicadas por el Tribunal de Disciplina del Colegio mediante procedimiento administrativo, sin proceso judicial previo. Las resoluciones son recurribles ante la Justicia contencioso-administrativa provincial.</p>
-
-      <h2 class="subsection-title" id="s12-8">12.8 Mecanismos de baja y suspensión</h2>
-      <p>El Corredor Matriculado puede solicitar al Colegio la baja de un Adscripto Inmobiliario bajo su responsabilidad en cualquier momento, sin necesidad de justificación ante el Colegio. La adscripción se cancela y el Adscripto Inmobiliario deja de operar válidamente desde esa fecha. El corredor queda liberado de responsabilidad por las operaciones posteriores a la baja registrada.</p>
-      <p>El Colegio puede suspender o cancelar la adscripción de oficio ante infracciones del Adscripto Inmobiliario, con o sin pedido del corredor. El detalle de causales y procedimiento será objeto del reglamento a elaborar con los Colegios y la UNR. Los principios irrenunciables son tres: el Colegio tiene potestad de suspender sin proceso judicial previo; el Corredor Responsable tiene derecho de solicitar la baja sin burocracia; y el Adscripto Inmobiliario tiene derecho a recurrir cualquier sanción ante la Justicia contencioso-administrativa provincial.</p>
-
-      <h2 class="subsection-title" id="s12-9">12.9 Sistema de formación y habilitación progresiva</h2>
-
-      <p>El Adscripto Inmobiliario no nace habilitado — se habilita a través de la formación. El Curso de Formación Inicial del Colegio tiene una carga de <strong>96 horas</strong> distribuidas en ocho módulos:</p>
-
-      <div class="box-key">
-        <div class="box-label">Los 8 módulos del Curso de Formación Inicial</div>
-        <p style="margin:0.3rem 0"><strong>Módulo 1</strong> — Marco legal y actos habilitados: 12 hs.</p>
-        <p style="margin:0.3rem 0"><strong>Módulo 2</strong> — Ética y deontología profesional: 8 hs.</p>
-        <p style="margin:0.3rem 0"><strong>Módulo 3</strong> — Prevención de lavado de activos (UIF/GAFI): 10 hs.</p>
-        <p style="margin:0.3rem 0"><strong>Módulo 4</strong> — Arquitectura y hábitat: 16 hs. Orientaciones, iluminación, ventilación, patologías, cómo asesorar en una visita.</p>
-        <p style="margin:0.3rem 0"><strong>Módulo 5</strong> — Nociones jurídicas y registrales: 16 hs. Estados registrales, inhibiciones, hipotecas, nociones notariales, qué puede y qué no puede suscribir.</p>
-        <p style="margin:0.3rem 0"><strong>Módulo 6</strong> — Atención al cliente y comunicación: 10 hs.</p>
-        <p style="margin:0.3rem 0"><strong>Módulo 7</strong> — Herramientas digitales y Propia.com.ar: 8 hs.</p>
-        <p style="margin:0.3rem 0"><strong>Módulo 8</strong> — Valuación básica: 16 hs.</p>
-      </div>
-
-      <p>La asistencia está vinculada en tiempo real al estado de habilitación. Si el Adscripto Inmobiliario deja de cursar, el sistema lo bloquea automáticamente. Si no aprueba un módulo, tiene un recuperatorio dentro de los 30 días — y si no aprueba el recuperatorio, debe recursar solo ese módulo, no el curso completo.</p>
-
-      <p>El sistema registra cuatro estados permanentes: <strong>Habilitado</strong> — curso aprobado y adscripción vigente; <strong>Inactivo</strong> — sin Corredor Responsable activo, puede cursar pero no operar; <strong>Bloqueado</strong> — no aprobó o no renovó; <strong>Suspendido</strong> — medida cautelar del Tribunal. Durante la ventana de regularización de 90 días existe un quinto estado transitorio: <strong>En formación</strong> — inscripto al amparo de la ventana, cursando, habilitado provisoriamente bajo supervisión estricta del Corredor Responsable. Vencida esa ventana, este estado deja de existir.</p>
-
-      <p><strong>Costos:</strong> la adscripción anual equivale al 50% de la cuota de matrícula plena — a cargo del Corredor Responsable. El Curso de Formación Inicial es arancelado y a cargo del Adscripto Inmobiliario. La actualización anual — entre 4 y 6 horas según el Directorio — equivale al 20% adicional de la cuota de matrícula plena, también a cargo del Adscripto.</p>
-
-      <p><strong>Corredores universitarios:</strong> quienes acrediten título universitario quedan eximidos del curso inicial y se registran con habilitación plena desde el inicio. Deben igualmente completar la actualización anual.</p>
-
-      <p class="destacado"><strong>La ventana de regularización:</strong> durante los primeros 90 días desde la entrada en vigencia del sistema, los Corredores Responsables pueden inscribir a quienes hoy operan informalmente bajo su estructura, abonar la adscripción e inscribirlos en el curso. Vencida esa ventana, el ingreso requiere tener el curso aprobado con carácter previo. Quien opere fuera del sistema incurre en infracción gravísima. No es persecución — es una salida digna con fecha de cierre.</p>
-
-      <h2 class="subsection-title" id="s12-10">12.10 Horizonte de largo plazo: la jerarquización académica</h2>
-      <p>Este esquema es un punto de partida, no un punto de llegada. Esta propuesta es el primer paso de una evolución que tiene horizonte largo y antecedentes concretos.</p>
-      <p>La adscripción es el piso. La matrícula plena es el siguiente escalón. Y el horizonte — que esta propuesta no impone pero sí impulsa — es que los futuros corredores sean <strong>licenciados de grado</strong>. No es una declaración abstracta: ya está ocurriendo. Entre Ríos modificó su ley para exigir licenciatura de grado. Rosario tiene la primera licenciatura pública del país en la disciplina, dictada por la UNR. La tendencia existe, tiene nombre y tiene instituciones que la sostienen.</p>
-      <p class="destacado">Esta propuesta es coherente con ese camino y lo impulsa desde abajo. Cada Adscripto Inmobiliario que se forma es un potencial Corredor Responsable. Cada Corredor Responsable que se especializa es un potencial licenciado. El sistema construye la base desde donde esa escalera puede recorrerse. No como requisito inmediato, sino como dirección explícita e institucional. La profesión que sabe hacia dónde va tiene más poder para definir cómo llega.</p>
-    </div>
-
-    <hr class="divider">
-
-    <!-- BIBLIOGRAFÍA -->
-    <div class="section" id="biblio">
-      <div class="section-number">Referencias</div>
-      <h1 class="section-title">Fuentes y bibliografía</h1>
-
-      <div class="bib-group">
-        <div class="bib-group-title">Marco normativo argentino</div>
-        <div class="bib-item">Ley Nacional N° 20.266 — Martilleros y Corredores Públicos (mod. por Ley 25.028). Art. 35 sobre ejercicio ilegal y honorarios.
-          <a href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/60000-64999/61719/norma.htm" target="_blank">servicios.infoleg.gob.ar — Texto completo Ley 20.266</a>
-        </div>
-        <div class="bib-item">Ley Provincial N° 13.154 de Santa Fe — Ejercicio del Corretaje Inmobiliario. Legislatura de la Provincia de Santa Fe.
-          <a href="https://www.santafe.gov.ar/normativa/" target="_blank">santafe.gov.ar — Normativa provincial</a>
-        </div>
-        <div class="bib-item">Ley Provincial N° 9445 de Córdoba — Martilleros y Corredores Públicos. Art. 22, figura del adscripto.
-          <a href="https://cpicordoba.org.ar/wp-content/uploads/2023/09/Ley-9445_Estatutos_codigo-de-etica_V1.pdf" target="_blank">cpicordoba.org.ar — Texto Ley 9445</a>
-        </div>
-        <div class="bib-item">Constitución Nacional Argentina — Art. 121, facultades reservadas de las provincias.
-          <a href="https://www.argentina.gob.ar/normativa/nacional/constitucion-nacional" target="_blank">argentina.gob.ar — Constitución Nacional</a>
-        </div>
-      </div>
-
-      <div class="bib-group">
-        <div class="bib-group-title">Registro de Agentes Autorizados CNV — antecedente regulatorio</div>
-        <div class="bib-item">Comisión Nacional de Valores — Examen de Idoneidad en el Mercado de Capitales. Requisito para quienes asesoren al público inversor sin título universitario.
-          <a href="https://www.argentina.gob.ar/servicio/rendir-el-examen-de-idoneidad" target="_blank">argentina.gob.ar — Examen de idoneidad CNV</a>
-        </div>
-        <div class="bib-item">CNV — Registro Público de Idóneos. Base de personas habilitadas para asesorar en mercado de capitales.
-          <a href="https://www.cnv.gov.ar/sitioWeb/RegistrosPublicos/Idoneos" target="_blank">cnv.gov.ar — Registro de Idóneos</a>
-        </div>
-        <div class="bib-item">Resolución General CNV N° 875/2020 — Normas de conducta y examen de idoneidad. Boletín Oficial, 4 de diciembre de 2020.
-          <a href="https://www.boletinoficial.gob.ar/detalleAviso/primera/238093/20201204" target="_blank">boletinoficial.gob.ar — RG CNV 875/2020</a>
-        </div>
-        <div class="bib-item">CNV — Inscripción en el Registro de Idóneos. Requisitos y procedimiento.
-          <a href="https://www.argentina.gob.ar/servicio/inscripcion-en-el-registro-de-idoneos" target="_blank">argentina.gob.ar — Inscripción Registro de Idóneos</a>
-        </div>
-      </div>
-
-      <div class="bib-group">
-        <div class="bib-group-title">Estadísticas del sector franquicias inmobiliarias</div>
-        <div class="bib-item">COCIR — Instituto de Investigaciones Económicas (IIE), Facultad de Ciencias Económicas y Estadística, UNR — Relevamiento de Tasa de Ocupación y Vacancia de Locales Comerciales de Rosario. Serie ininterrumpida desde diciembre de 2020. Undécima edición: diciembre 2025.
-          <a href="https://rephip.unr.edu.ar/items/acc6ef80-3b93-4b22-94be-db5c5f8d12bb" target="_blank">rephip.unr.edu.ar — Repositorio UNR</a>
-        </div>
-        <div class="bib-item">COCIR — IIE/UNR — Informes periódicos sobre evolución de valores de alquileres residenciales y comerciales en Rosario, relación alquiler/salario e impacto de la inflación.
-          <a href="https://cocir.org.ar/novedades/881/cuanto-sale-alquilar-en-rosario-segun-cada-barrio/" target="_blank">cocir.org.ar — Informe alquileres por barrio, abril 2025</a>
-        </div>
-        <div class="bib-item">RE/MAX Argentina — Datos institucionales de cobertura, cantidad de franquicias y agentes. Más de 200 franquicias, 7.800 agentes, 120.000 familias asistidas en 2024.
-          <a href="https://www.remax.com.ar" target="_blank">remax.com.ar</a>
-        </div>
-        <div class="bib-item">CAMESI — Cámara Argentina de Empresas de Servicios Inmobiliarios. Datos sobre empleo en el sector (15.000 directos, 30.000 conexos).
-          <a href="https://www.camesi.org.ar" target="_blank">camesi.org.ar</a>
-        </div>
-      </div>
-
-      <div class="bib-group">
-        <div class="bib-group-title">Jurisprudencia nacional</div>
-        <div class="bib-item">Corte Suprema de Justicia de Santa Fe — <em>Högner, Caroline</em> s/ Planteo de inconstitucionalidad y apelación de resolución del Tribunal de Disciplina y Ética Profesional del Colegio de Corredores Inmobiliarios de la Pcia. de Santa Fe. A. y S. T. 294, p. 363/383, 03/12/2019. Cita SAIJ: 19090405.
-          <a href="https://bdj.justiciasantafe.gov.ar" target="_blank">bdj.justiciasantafe.gov.ar — Banco de Datos Jurídico de Santa Fe</a>
-        </div>
-        <div class="bib-item">Corte Suprema de Justicia de Santa Fe — <em>Batlle Casas, Ivana</em> s/ ídem. A. y S. T. 294, p. 343/362, 03/12/2019. Jurisprudencia concordante con Högner.
-          <a href="https://bdj.justiciasantafe.gov.ar" target="_blank">bdj.justiciasantafe.gov.ar</a>
-        </div>
-        <div class="bib-item">Corte Suprema de Justicia de Santa Fe — <em>Astolfi, Cristian Ricardo y otros</em> s/ Suspensión de matrícula. A. y S. T. 297, p. 151/154, 05/05/2020. Cita SAIJ: 20090155.
-          <a href="https://bdj.justiciasantafe.gov.ar" target="_blank">bdj.justiciasantafe.gov.ar</a>
-        </div>
-        <div class="bib-item">Cámara Civil y Comercial N°13 de Mar del Plata — Fallo de abril 2025 declarando ilegal la participación de agentes no matriculados en operaciones de compraventa bajo modelo RE/MAX.</div>
-        <div class="bib-item">Suprema Corte de Justicia de la Provincia de Santa Fe — Fallo sobre licitud del modelo de redes inmobiliarias con agentes.</div>
-        <div class="bib-item">Cámara Nacional de Apelaciones en lo Comercial — Fallo de mayo 2022 revocando resolución de IGJ contra RE/MAX Argentina.</div>
-        <div class="bib-item">Colegio de Martilleros de la Provincia de Buenos Aires — Informe sobre 30 causas con sentencia favorable a los colegios.</div>
-      </div>
-
-      <div class="bib-group">
-        <div class="bib-group-title">Contexto internacional</div>
-        <div class="bib-item">National Association of Realtors (NAR) — Sistema de licencias de dos niveles en Estados Unidos: salesperson license y broker license.
-          <a href="https://www.nar.realtor" target="_blank">nar.realtor</a>
-        </div>
-        <div class="bib-item">Consejo General de los Colegios de Agentes de la Propiedad Inmobiliaria de España — Situación regulatoria e intrusismo en el sector.
-          <a href="https://www.cgcapi.es" target="_blank">cgcapi.es</a>
-        </div>
-        <div class="bib-item">IMPIC — Instituto dos Mercados Públicos, do Imobiliário e da Construção. Regulación del corretaje inmobiliario en Portugal.
-          <a href="https://www.impic.pt" target="_blank">impic.pt</a>
-        </div>
-        <div class="bib-item">Decreto Legislativo italiano N° 59/2010 — Regulación de actividades comerciales incluyendo intermediación inmobiliaria con seguro obligatorio.</div>
-        <div class="bib-item">Ley de Corredores de Bienes Raíces de Ecuador — Sistema de dos niveles vigente desde 1984. Caso de debilidad institucional por falta de poder de policía colegial efectivo.</div>
-      </div>
-
-      <div class="bib-group">
-        <div class="bib-group-title">Marco constitucional de Santa Fe</div>
-        <div class="bib-item">Constitución de la Provincia de Santa Fe, reforma 2025 — Artículo 53: "La Provincia reconoce la existencia de los Colegios y Consejos Profesionales creados por ley." Promulgada en septiembre de 2025.
-          <a href="https://www.santafe.gob.ar/ms/reforma-constitucion/wp-content/uploads/sites/86/2025/09/CONSTITUCION-DE-LA-PROV-DE-SF-2025_VF-WEB.pdf" target="_blank">santafe.gob.ar — Texto completo Constitución 2025</a>
-        </div>
-        <div class="bib-item">El Litoral — "Reconocimiento constitucional para colegios profesionales en Santa Fe", 28 de agosto de 2025.
-          <a href="https://www.ellitoral.com/politica/colegios-consejos-profesionales-reconocidos-constitucionalmente-en-santa-fe" target="_blank">ellitoral.com — Nota completa</a>
-        </div>
-      </div>
-
-      <div class="bib-group">
-        <div class="bib-group-title">Proyecto de desregulación</div>
-        <div class="bib-item">Sturzenegger, Federico — Anuncio público de intención de desregulación del corretaje inmobiliario. Evento del sector, 27 de abril de 2026.
-          <a href="https://www.ambito.com/real-estate/federico-sturzenegger-confirmo-que-junio-enviara-la-desregulacion-inmobiliaria-al-congreso-bajar-costos-la-compraventa-n6271440" target="_blank">ambito.com — Confirmación de Sturzenegger</a>
-        </div>
-        <div class="bib-item">Proyecto de ley "Ley de Libertad Inmobiliaria" — Diputado Alejandro Bongiovanni, mayo 2025. Expediente 2586-D-2025, Trámite Parlamentario N° 58.
-          <a href="https://rest.hcdn.gob.ar/web/tramites-parlamentarios/render/adjunto/682fab21857d1.pdf" target="_blank">hcdn.gob.ar — Texto completo del proyecto</a>
-        </div>
-        <div class="bib-item">Cámara Nacional de Apelaciones en lo Contencioso Administrativo Federal — "R. P. D. M. c/ EN - ANSES s/ amparo Ley 16.986". Fallo que establece que las sanciones sobre matriculados son facultad exclusiva del Colegio profesional.</div>
-        <div class="bib-item">Consejo Profesional de Ciencias Económicas de Entre Ríos — Convenio de Colaboración Mutua con el Colegio de Escribanos de Entre Ríos, noviembre 2021.
-          <a href="https://www.cpceer.org.ar/convenios-y-beneficios/educacion/convenio-con-el-colegio-de-escribanos" target="_blank">cpceer.org.ar — Convenio intercolegial</a>
-        </div>
-        <div class="bib-item">Archivo de Protocolos del Colegio de Escribanos de Córdoba — Verificación de habilitación profesional de corredores inmobiliarios como condición de acceso.
-          <a href="https://escribanos.org.ar/archivo-de-protocolos" target="_blank">escribanos.org.ar — Archivo de Protocolos</a>
-        </div>
-      </div>
-
-    </div>
-
-  </div><!-- /content -->
-
-  <div id="footer">
-    <span>El corretaje inmobiliario: diagnóstico y ordenamiento del sistema · 2026</span>
-    <span>Documento de trabajo · Uso institucional restringido</span>
   </div>
 
-</div><!-- /main -->
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">4</span>
+      <span class="acc-title">Antecedentes normativos — lo que ya existe en Argentina</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">La Ley Provincial N° 9445 de Córdoba ya contempla la figura del corredor adscripto. El Colegio de Arquitectos de Rosario tiene un sistema de matrícula dependiente desde hace décadas. La Ley 13.154 de Santa Fe regula el ejercicio del corretaje. El Artículo 53 de la nueva Constitución Provincial de 2025 reconoce la existencia de los Colegios Profesionales y fundamenta su competencia para reglamentar el ejercicio profesional — es el blindaje constitucional de fondo.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s4">Leer los antecedentes normativos</a>
+    </div>
+  </div>
+
+  <div class="section-label">La propuesta</div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">5</span>
+      <span class="acc-title">El Adscripto Inmobiliario — la figura central</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">Un colaborador registrado ante el Colegio, habilitado para actos preparatorios de corretaje bajo la responsabilidad exclusiva de un Corredor Responsable. No es una derrota frente a las franquicias — es reconocer algo que existe, que funcionó y que seguirá funcionando. Miles de personas trabajan hoy en el sector sin matrícula: ningún gobierno lo resolvió, ningún fallo judicial lo revirtió. Esta figura le da nombre, forma y control institucional a esa realidad.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s5">Leer sobre el Adscripto Inmobiliario</a>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">6</span>
+      <span class="acc-title">Argumentos estratégicos — por qué convence a todos</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">El sistema tiene un argumento para cada interlocutor: para el legislador, es inclusión sin dejar gente afuera; para el ciudadano, es garantía de que hay alguien responsable; para el gobierno nacional, es un mecanismo que se autofinancia sin costo para el Estado, alivia a la Justicia y respeta la libre competencia. La regulación no crea un monopolio: crea un estándar mínimo de responsabilidad.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s6">Leer los argumentos estratégicos</a>
+    </div>
+  </div>
+
+  <div class="section-label">El camino</div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">7</span>
+      <span class="acc-title">Estrategia de implementación — cómo llegar</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">El sistema puede implementarse sin esperar la Legislatura: primero, modificar el Reglamento del Tribunal de Ética (75% de los jueces); segundo, reformar el Estatuto mediante Asamblea Extraordinaria. Con eso, el Colegio queda habilitado para crear el Registro de Adscriptos Inmobiliarios. La reforma de la Ley 13.154 se impulsa en paralelo — con el sistema ya funcionando como evidencia ante la Legislatura.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s7">Leer la estrategia completa</a>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">8</span>
+      <span class="acc-title">UIF y GAFI — el argumento que nadie está mencionando</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">La desregulación eliminaría la figura del sujeto obligado ante la UIF. Sin matrícula, no hay a quién citar, multar o investigar ante una operación sospechosa. El sector inmobiliario es uno de los principales vectores de lavado de activos en el mundo. El sistema de adscripción preserva la trazabilidad: el Adscripto opera bajo la responsabilidad del Corredor Responsable, que mantiene su condición de sujeto obligado.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s8">Leer la sección UIF/GAFI completa</a>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">9–10</span>
+      <span class="acc-title">Marco institucional y comparación de alternativas</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">Se analizan cuatro alternativas: desregulación total, registro estatal de idoneidad, statu quo y adscripción colegial. Solo la adscripción resuelve los dos problemas al mismo tiempo: da entidad a quienes hoy operan informalmente y mantiene el control institucional del Colegio. Las otras tres dejan al ciudadano desprotegido, al Colegio sin rol o al problema sin resolver.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s9">Leer el marco institucional</a>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">11</span>
+      <span class="acc-title">Conclusión — el círculo que se cierra</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">La profesión del Corredor Inmobiliario nació para proteger a la sociedad. Ese mandato exige reconocer que el sector cambió y que el sistema de control tiene que cambiar con él. Esta propuesta no impone un destino: cierra un círculo. Toma lo que ya existe — personas trabajando en el sector, profesionales capacitados, una institución que los agrupa — y le da forma legal, ética y operativa.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s11">Leer la conclusión completa</a>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">12</span>
+      <span class="acc-title">Esquema de funcionamiento del sistema</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">Registro con numeración correlativa histórica, cinco Adscriptos por Corredor Responsable, 96 horas de formación en 8 módulos, cinco estados de habilitación y ventana inicial de 90 días para regularizar a quienes hoy operan informalmente. El Corredor Responsable paga el 50% de la adscripción. El Adscripto paga el curso inicial y la actualización anual del 20%. El sistema se autofinancia.</p>
+      <a class="acc-readmore" href="corretaje_inmobiliario_diagnostico_y_ordenamiento.html#s12">Ver el esquema completo</a>
+    </div>
+  </div>
+
+  <div class="section-label">Documentos de trabajo</div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">R</span>
+      <span class="acc-title">Reglamento del Sistema de Adscripto Inmobiliario</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">45 artículos en 10 capítulos. Define la figura del Adscripto Inmobiliario, el sistema de registro e identificación, el vínculo con el Corredor Responsable, la formación obligatoria, los costos, los actos habilitados y exclusivos, las sanciones graduadas y el período de transición. Borrador en desarrollo activo — no es un texto definitivo.</p>
+      <a class="acc-readmore" href="reglamento.html">Leer el reglamento</a>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-trigger" onclick="toggle(this)">
+      <span class="acc-num">M</span>
+      <span class="acc-title">Mapa de reformas institucionales</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p class="acc-text">Tres instrumentos en cascada: Reglamento del Tribunal de Ética (75% de los jueces, sin Asamblea), Estatuto del Colegio (Asamblea Extraordinaria, 2/3 de presentes) y Ley 13.154 (reforma legislativa). Analiza cuatro caminos posibles y recomienda el Camino B: arrancar con los dos primeros mientras se impulsa la reforma legislativa en paralelo.</p>
+      <a class="acc-readmore" href="reformas.html">Ver el mapa de reformas</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p class="footer-tagline">Inclusión con legalidad</p>
+  <p class="footer-meta">Borrador institucional · Rosario, Santa Fe · 2026</p>
+</footer>
 
 <script>
-  function toggleMenu() {
-    document.getElementById('sidebar').classList.toggle('open');
-  }
-
-  // Highlight active nav on scroll
-  window.addEventListener('scroll', function() {
-    const sections = document.querySelectorAll('.section, #cover, #biblio');
-    const navItems = document.querySelectorAll('.nav-item');
-    let current = '';
-    sections.forEach(section => {
-      const top = section.getBoundingClientRect().top;
-      if (top <= 120) current = section.id;
-    });
-    navItems.forEach(item => {
-      item.classList.remove('active');
-      if (item.getAttribute('href') === '#' + current) {
-        item.classList.add('active');
-      }
-    });
-  });
-
-  // Close sidebar on mobile after click
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function() {
-      if (window.innerWidth <= 900) {
-        document.getElementById('sidebar').classList.remove('open');
-      }
-    });
-  });
+function toggle(btn) {
+  const item = btn.closest('.acc-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
 </script>
-
 </body>
 </html>
