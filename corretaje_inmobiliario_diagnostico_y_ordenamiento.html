@@ -621,6 +621,7 @@
 
 <!-- SIDEBAR -->
 <nav id="sidebar">
+  <button id="menu-toggle" onclick="toggleMenu()" aria-label="Menú">☰</button>
   <div class="sidebar-header">
     <div class="logo">Corretaje 2026</div>
     <div class="doc-title">Modernización del Corretaje Inmobiliario en Argentina</div>
@@ -1459,8 +1460,10 @@
   function toggleMenu() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
-    sidebar.classList.toggle('open');
+    const btn = document.getElementById('menu-toggle');
+    const isOpen = sidebar.classList.toggle('open');
     if (overlay) overlay.classList.toggle('open');
+    if (btn) btn.textContent = isOpen ? '✕' : '☰';
   }
 
   // Highlight active nav on scroll
