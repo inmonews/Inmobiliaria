@@ -537,6 +537,24 @@
     .comparison { grid-template-columns: 1fr; }
     .phases { grid-template-columns: repeat(2, 1fr); }
   }
+
+  /* ── MOBILE OVERLAY ── */
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+  }
+  #sidebar-overlay.open { display: block; }
+  @media (max-width: 900px) {
+    #sidebar { z-index: 100; box-shadow: 4px 0 20px rgba(0,0,0,0.3); }
+    #menu-toggle { top: 12px; left: 12px; }
+    #content { padding: 60px 20px 80px; }
+    .debate-v { font-size: 14px; }
+    .debate-v-gobierno, .debate-v-respuesta { padding: 0.7rem 1rem; }
+    .resumen-inner { padding: 32px 20px; }
+  }
 </style>
 <style>
 .req-badge { display:inline-block; padding:0.25rem 0.8rem; border-radius:2px; font-size:0.8rem; font-weight:700; margin-bottom:1rem; letter-spacing:0.03em; }
