@@ -589,17 +589,21 @@
   #mob-btn {
     display: none;
     position: fixed;
-    top: 14px; left: 14px;
-    z-index: 999;
-    width: 44px; height: 44px;
-    background: #2a2a2a;
-    border: none;
+    top: 14px;
+    left: 14px;
+    z-index: 9999;
+    width: 44px;
+    height: 44px;
+    background: rgba(42,42,42,0.95);
+    border: 1px solid rgba(255,255,255,0.3);
     border-radius: 8px;
     color: white;
     font-size: 22px;
     cursor: pointer;
     line-height: 44px;
     text-align: center;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
   #mob-overlay {
     display: none;
@@ -610,9 +614,9 @@
   }
 
   @media (max-width: 900px) {
+    #mob-btn { display: block !important; }
     :root { --sidebar-w: 0px; }
     #main { margin-left: 0 !important; }
-    #mob-btn { display: block !important; }
     #sidebar {
       position: fixed;
       top: 0; left: 0; bottom: 0;
@@ -1473,8 +1477,6 @@
 
 
 
-<div id="mob-overlay" onclick="mobClose()"></div>
-<button id="mob-btn" onclick="mobToggle()">&#9776;</button>
 <script>
 function mobToggle(){
   var s=document.getElementById('sidebar');
@@ -1482,13 +1484,34 @@ function mobToggle(){
   var b=document.getElementById('mob-btn');
   var open=s.classList.toggle('open');
   o.style.display=open?'block':'none';
-  b.textContent=open?'✕':'☰';
+  if(open){
+    b.innerHTML='&lsaquo;';
+    b.style.left='292px';
+    b.style.borderColor='rgba(255,255,255,0.2)';
+  } else {
+    b.innerHTML='&rsaquo;';
+    b.style.left='14px';
+    b.style.borderColor='#d4845a';
+  }
 }
 function mobClose(){
-  document.getElementById('sidebar').classList.remove('open');
+  var s=document.getElementById('sidebar');
+  var b=document.getElementById('mob-btn');
+  s.classList.remove('open');
   document.getElementById('mob-overlay').style.display='none';
-  document.getElementById('mob-btn').textContent='☰';
+  b.innerHTML='&rsaquo;';
+  b.style.left='14px';
+  b.style.borderColor='#d4845a';
 }
 </script>
+
+<style>
+@media screen and (max-width: 900px) {
+  #mob-btn { display: block !important; visibility: visible !important; opacity: 1 !important; }
+}
+</style>
+<div id="mob-overlay" onclick="mobClose()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9998;"></div>
+<button id="mob-btn" onclick="mobToggle()" style="display:none;position:fixed;top:14px;left:14px;z-index:9999;width:44px;height:44px;background:#2a2a2a;border:2px solid #d4845a;border-radius:8px;color:white;font-size:22px;cursor:pointer;line-height:42px;text-align:center;padding:0;transition:left 0.25s;">&rsaquo;</button>
+
 </body>
 </html>
