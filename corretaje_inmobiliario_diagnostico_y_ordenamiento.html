@@ -546,26 +546,14 @@
   }
 
   /* ── MOBILE TOGGLE ── */
-  #menu-toggle {
-    display: none;
-    position: fixed;
-    top: 16px; left: 16px;
-    z-index: 200;
-    background: var(--navy);
-    border: none;
-    color: white;
-    padding: 10px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 20px;
-  }
+  
 
   @media (max-width: 900px) {
     :root { --sidebar-w: 0px; }
     #sidebar { transform: translateX(-280px); width: 280px; }
     #sidebar.open { transform: translateX(0); }
     #main { margin-left: 0; }
-    #menu-toggle { display: block; }
+    
     #cover { padding: 60px 32px 50px; }
     .cover-title { font-size: 30px; }
     #content { padding: 40px 32px 80px; }
@@ -596,36 +584,89 @@
 
 
   /* ── MOBILE OVERLAY ── */
-  #sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 99;
-  }
-  #sidebar-overlay.open { display: block; }
-  @media (max-width: 900px) {
-    #sidebar { z-index: 100; box-shadow: 4px 0 20px rgba(0,0,0,0.3); }
-    #menu-toggle { top: 12px; left: 12px; }
+  
+  
+  
+    
     #content { padding: 60px 20px 80px; }
     .debate-v { font-size: 14px; }
     .debate-v-gobierno, .debate-v-respuesta { padding: 0.7rem 1rem; }
     .resumen-inner { padding: 32px 20px; }
   }
+
+  /* MOBILE MENU BUTTON */
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 280px;
+      transform: translateX(-280px);
+      transition: transform 0.25s ease;
+      z-index: 99;
+      overflow-y: auto;
+    }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0 !important; }
+    #cover { padding: 60px 24px 40px !important; }
+    #content { padding: 48px 20px 80px !important; }
+  }
+
+
+  /* MOBILE MENU */
+  #menu-toggle {
+    display: none;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    line-height: 1;
+    margin: 8px 12px 4px;
+    width: calc(100% - 24px);
+    text-align: center;
+  }
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 98;
+  }
+  #sidebar-overlay.open { display: block; }
+  @media (max-width: 900px) {
+    #menu-toggle { display: block; }
+    :root { --sidebar-w: 0px; }
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 280px;
+      transform: translateX(-280px);
+      transition: transform 0.25s ease;
+      z-index: 99;
+      overflow-y: auto;
+    }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0 !important; }
+    #cover { padding: 60px 24px 40px !important; }
+    #content { padding: 48px 20px 80px !important; }
+  }
+
 </style>
 </head>
 <body>
 
-<div id="sidebar-overlay" onclick="toggleMenu()"></div>
-<button id="menu-toggle" onclick="toggleMenu()">☰</button>
 
 <!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
 <nav id="sidebar">
-  <button id="menu-toggle" onclick="toggleMenu()" aria-label="Menú">☰</button>
-  <div class="sidebar-header">
+    <div class="sidebar-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
     <div class="logo">Corretaje 2026</div>
     <div class="doc-title">Modernización del Corretaje Inmobiliario en Argentina</div>
   </div>
+  <button id="menu-toggle" title="Menú" style="display:none;">&#9776;</button>
   <div class="nav-doc-links">
     <a class="nav-doc-link" href="index.html">← Índice</a>
     <a class="nav-doc-link outline" href="reglamento.html">Reglamento →</a>
@@ -1456,42 +1497,28 @@
 
 </div><!-- /main -->
 
+
+
+
 <script>
-  function toggleMenu() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    const btn = document.getElementById('menu-toggle');
-    const isOpen = sidebar.classList.toggle('open');
-    if (overlay) overlay.classList.toggle('open');
-    if (btn) btn.textContent = isOpen ? '✕' : '☰';
+(function() {
+  var btn = document.getElementById('menu-toggle');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebar-overlay');
+  if (!btn || !sidebar) return;
+  btn.addEventListener('click', function() {
+    var isOpen = sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('open', isOpen);
+    btn.textContent = isOpen ? '\u2715' : '\u2630';
+  });
+  if (overlay) {
+    overlay.addEventListener('click', function() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+      btn.textContent = '\u2630';
+    });
   }
-
-  // Highlight active nav on scroll
-  window.addEventListener('scroll', function() {
-    const sections = document.querySelectorAll('.section, #cover, #biblio');
-    const navItems = document.querySelectorAll('.nav-item');
-    let current = '';
-    sections.forEach(section => {
-      const top = section.getBoundingClientRect().top;
-      if (top <= 120) current = section.id;
-    });
-    navItems.forEach(item => {
-      item.classList.remove('active');
-      if (item.getAttribute('href') === '#' + current) {
-        item.classList.add('active');
-      }
-    });
-  });
-
-  // Close sidebar on mobile after click
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function() {
-      if (window.innerWidth <= 900) {
-        document.getElementById('sidebar').classList.remove('open');
-      }
-    });
-  });
+})();
 </script>
-
 </body>
 </html>
