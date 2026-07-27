@@ -572,6 +572,8 @@
 </style>
 </head>
 <body>
+<div id="sidebar-overlay" onclick="toggleMenu()"></div>
+<button id="menu-toggle" onclick="toggleMenu()">☰</button>
 <nav id="sidebar">
   <div class="sidebar-header">
     <div class="logo">Corretaje 2026</div>
@@ -743,5 +745,13 @@
   </div>
 </div>
 </div>
+<script>
+  function toggleMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('open');
+  }
+</script>
 </body>
 </html>
