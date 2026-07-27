@@ -584,7 +584,7 @@
 .conclusion-box h3 { color:var(--gold); font-family:'Playfair Display',serif; margin-bottom:0.8rem; font-size:1.3rem; letter-spacing:0.02em; }
 .conclusion-box p { color:#ffffff; line-height:1.75; font-size:1.02rem; }
 
-.nav-doc-link { display:block; padding:9px 16px 9px 16px; margin: 4px 12px; color:var(--navy) !important; background:var(--gold); text-decoration:none; font-size:14px; font-family:"Source Serif 4",serif; border-radius:3px; font-weight:600; transition:all 0.2s; line-height:1.4; } .nav-doc-link:hover { background:var(--gold-light); }</style>
+</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mapa de Reformas Institucionales — Adscripto Inmobiliario 2026</title>
@@ -611,10 +611,6 @@
   <div class="nav-section">Estrategia</div>
   <a class="nav-item" href="#r4">4. Mapa de caminos</a>
   <a class="nav-item" href="#r5">5. Orden sugerido</a>
-  <div class="nav-section" style="margin-top:1.5rem;">Navegar</div>
-  
-  <a class="nav-doc-link" href="index.html">← Documento principal</a>
-  <a class="nav-doc-link" href="reglamento.html">← Reglamento</a>
 </nav>
 
 <div id="main">
@@ -795,6 +791,15 @@ function mobClose(){
   b.style.left='14px';
   b.style.borderColor='#d4845a';
 }
+// Close sidebar when any nav link is tapped
+document.addEventListener('DOMContentLoaded', function(){
+  var links = document.querySelectorAll('#sidebar a');
+  links.forEach(function(link){
+    link.addEventListener('click', function(){
+      mobClose();
+    });
+  });
+});
 </script>
 
 <style>
